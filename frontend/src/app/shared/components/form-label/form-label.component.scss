@@ -1,0 +1,33 @@
+@import "global-variables";
+
+.form-label {
+  position: relative;
+
+  .p-inputtext.ng-touched.ng-invalid, p-dropdown.ng-invalid.ng-touched .p-dropdown,
+  p-calendar.ng-invalid.ng-touched .p-inputtext,
+  p-multiselect.ng-invalid.ng-touched .p-multiselect {
+    border-color: $error-field-color !important;
+  }
+
+  .has-icon {
+    .left-icon {
+      position: absolute;
+      background: white;
+      left: 1.3rem;
+      z-index: 2;
+    }
+
+
+    .p-float-label label {
+      margin-left: 2rem;
+    }
+
+    .p-dropdown-label, input, .p-multiselect-label {
+      padding-left: 3rem;
+    }
+  }
+}
+
+.p-dropdown {
+  min-height: 3.2rem;
+}

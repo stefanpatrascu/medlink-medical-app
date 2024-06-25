@@ -1,0 +1,189 @@
+<div data-testid="appointments-calendar" class="calendar-container relative flex overflow-y-hidden flex-column w-full h-full">
+
+  @if (loading) {
+    <div
+      data-testid="progress-bar-overlay"
+      class="calendar-loading-overlay">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+  }
+
+  @if (allowChangeView) {
+    <div class="md:flex">
+      <div class="flex w-full align-items-center justify-content-between md:justify-content-start lg:justify-content-start">
+        <p-buttonGroup>
+          <p-button styleClass="mt-2 {{selectedView === 'month' ? 'p-button-secondary' : 'p-button-primary'}}"
+                    (onClick)="viewMonth()"
+                    label="Month"
+                    data-testid="month-button"
+                    icon="pi pi-calendar"></p-button>
+          <p-button styleClass="mt-2 {{selectedView === 'week' ? 'p-button-secondary' : 'p-button-primary'}}" (onClick)="viewWeek()"
+                    label="Week"
+                    data-testid="week-button"
+                    icon="pi pi-calendar"></p-button>
+          <p-button styleClass="mt-2 {{selectedView === 'day' ? 'p-button-secondary' : 'p-button-primary'}}" styleClass="mt-2" (onClick)="viewDay()"
+                    label="Day"
+                    data-testid="week-button"
+                    icon="pi pi-calendar"></p-button>
+        </p-buttonGroup>
+
+        <p-button (onClick)="setTodayDate()" data-testid="today-button" styleClass="mt-2 md:ml-3" label="Today"></p-button>
+      </div>
+      <div class="flex w-full align-items-center pt-2 md:justify-content-end">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  }
+
+  @if (selectedView === 'month') {
+
+    @if (allowChangeInterval) {
+      <div class="flex w-full" data-testid="month-calendar">
+        <div class="w-2 flex align-items-center">
+          <button pButton (click)="prevMonth()" data-testid="prev-month-button" icon="pi pi-angle-left"></button>
+        </div>
+        <div class="w-full flex align-items-center justify-content-center"><h2>{{
+            currentDateMonthCalendar.toFormat('LLLL yyyy')
+          }}</h2></div>
+        <div class="w-2 flex align-items-center justify-content-end">
+          <button pButton (click)="nextMonth()" data-testid="next-month-button" icon="pi pi-angle-right"></button>
+        </div>
+      </div>
+    }
+
+    <div class="flex month-calendar-card overflow-auto">
+      <table class="table-fix-head w-full calendar">
+        <thead>
+        <tr>
+          @for (week of weekDays; track week) {
+            <th>{{ week }}</th>
+          }
+        </tr>
+        </thead>
+        <tbody>
+          @for (week of monthCalendar; track week) {
+            <tr>
+              @for (day of week; track day) {
+                <td [attr.data-testid]="'month_day_' + day.fullDate.toFormat('dd_MM')" class="day-of-month"
+                    [class.current-month]="day.currentMonth"
+                    (click)="onClickMonthDay(day.fullDate, day.currentMonth, day.dayName)"
+                    [class.cursor-pointer]="allowClickMonthDay && day.currentMonth && allowedWorkingHours && !allowedWorkingHours[day.dayName]['day_off']"
+                    [class.disabled-day]="allowedWorkingHours && allowedWorkingHours[day.dayName]['day_off']"
+                    [class.not-current-month]="!day.currentMonth" [class.current-date]="day.currentDate">
+                  <div class="flex h-full flex-column justify-content-between">
+                    @if (allowedWorkingHours && allowedWorkingHours[day.dayName]['day_off']) {
+                      <div class="not-available-day">Day off</div>
+                    }
+                    @if (currentDateMonthCalendar.toFormat('LLL') === day.fullDate.toFormat('LLL')) {
+                      <div>{{ day.fullDate.toFormat('dd') }}</div>
+                    } @else {
+                      <div>{{ day.fullDate.toFormat('dd LLL') }}</div>
+                    }
+
+                    @if (day.events.length > 0) {
+                      <div class="flex justify-content-end">
+                        @for (event of day.events; track event) {
+                          <span [pTooltip]="event.tooltip" class="event-label mr-1"
+                                [ngClass]="'label-' + event.type.toLocaleLowerCase()">
+                        </span>
+                        }
+                      </div>
+                    }
+
+                  </div>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+
+    @if (allowChangeInterval) {
+      <div class="flex w-full" data-testid="week-calendar">
+        <div class="w-2 flex align-items-center">
+          <button pButton (click)="prevWeekOrDay()" data-testid="next-week-button" icon="pi pi-angle-left"></button>
+        </div>
+        <div class="w-full flex align-items-center justify-content-center">
+          <h2>{{
+              currentDateWeekCalendar.toFormat('LLLL yyyy')
+            }}</h2>
+        </div>
+        <div class="w-2 flex align-items-center justify-content-end">
+          <button pButton (click)="nextWeekOrDay()" data-testid="prev-week-button" icon="pi pi-angle-right"></button>
+        </div>
+      </div>
+    }
+    <div class="flex overflow-auto h-full">
+      <table #weekCalendar class="table-fix-head w-full calendar week-calendar" (mouseleave)="unFocus()">
+        <thead>
+        <tr>
+          <th></th>
+          @for (week of weeksCalendar; track week) {
+            <th [class.current-date]="week.currentDate">
+              <div>{{ week.day }}</div>
+              <div><sub>{{ week.fullDate.toFormat('dd LLLL') }}</sub></div>
+            </th>
+          }
+        </tr>
+        </thead>
+        <tbody>
+          @for (interval of timeIntervals; track interval; let i = $index) {
+            <tr>
+              <td class="hour relative" [class.start-of-hour]="lineCurrentTime?.time === interval">
+                @if (lineCurrentTime?.time === interval) {
+                  <span class="line" [style.top.%]="lineCurrentTime?.topPosition">
+                    <span class="current-time">{{ lineCurrentTime?.currentTime }}</span>
+                  </span>
+                }
+                <strong> {{ interval }}</strong>
+              </td>
+              @for (week of weeksCalendar; track week; ) {
+                <td #ref [attr.data-testid]="'week_day_' + week.fullDate.toFormat('dd_MM')" class="relative hour min-width p-0"
+                    [class.disabled]="allowedWorkingHours && !allowedWorkingHours[week.day][interval]"
+                    [class.cursor-pointer]="allowClickMonthDay"
+                    (mouseup)="onWeekMouseUp(ref, i, week.fullDate)"
+                    (mousedown)="onWeekMouseDown(ref, i)"
+                    (mouseenter)="onWeekMouseEnter(ref, i)"
+                    [class.current-date]="week.currentDate">
+                  @if (lineCurrentTime?.time === interval) {
+                    <span class="line" [style.top.%]="lineCurrentTime?.topPosition"></span>
+                  }
+                  <table class="event-table">
+                    <tr>
+                      @for (event of week.events; track event) {
+
+                        @if (event.startDateTime.includes(interval)) {
+                          <td class="relative">
+                            <div class="event-cell"
+                                 (click)="onEventClick($event, event)"
+                                 (mouseup)="$event.stopPropagation()"
+                                 (mousedown)="$event.stopPropagation()"
+                                 (mouseenter)="$event.stopPropagation()"
+                                 [pTooltip]="event.tooltip"
+                                 [style.height.px]="event.diffMinutes ? (event.diffMinutes / intervalDuration) * cellHeight : 25"
+                                 [ngClass]="'label-' + event.type.toLocaleLowerCase()">
+                              <div class="event-title">{{ event.title }}{{
+                                  event.diffMinutes === intervalDuration ? ' - ' + event.startTime : ''
+                                }}
+                              </div>
+                              @if (event.diffMinutes !== intervalDuration) {
+                                <sub>{{ event.startTime }} - {{ event.endTime }}</sub>
+                              }
+                            </div>
+                          </td>
+                        }
+                      }
+                    </tr>
+                  </table>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  }
+</div>

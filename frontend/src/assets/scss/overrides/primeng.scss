@@ -1,0 +1,58 @@
+@import "global-variables";
+@import "table";
+
+.p-button {
+  font-family: $default-font-family;
+  font-size: $default-font-size;
+}
+
+.p-button.p-button-action {
+  background: #f1f5f9;
+  color: $default-font-color;
+}
+
+.required {
+  color: $error-field-color;
+}
+
+.p-message {
+  font-size: $default-font-size;
+}
+
+
+.p-menubar {
+  padding: 0px;
+  border: 0px;
+}
+
+//.p-button:not(.p-button-action):not(.p-button-text):not(.p-button-secondary):not(.p-button-icon-only):not(.p-button-link):not(.p-button-outlined) {
+//  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px lighten($primary-color, 25%);
+//  background: $primary-color;
+//}
+
+.p-button.p-button-secondary, .p-button-group.p-button-secondary > .p-button, .p-splitbutton.p-button-secondary > .p-button {
+  color: $white;
+  background: $secondary-color;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px lighten($secondary-color, 25%);
+}
+
+.p-button.p-button-success, .p-button-group.p-button-success > .p-button, .p-splitbutton.p-button-success > .p-button {
+  color: $white;
+  background: $success-color;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px lighten($success-color, 25%);
+}
+
+.p-button.p-button-primary, .p-button-group.p-button-primary > .p-button, .p-splitbutton.p-button-primary > .p-button {
+  color: $white;
+  background: $primary-color;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px lighten($primary-color, 25%);
+}
+
+.p-button-white {
+  color: $white;
+}
+
+.p-menubar .p-submenu-list {
+  z-index: 5;
+}
+

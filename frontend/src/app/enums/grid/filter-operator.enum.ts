@@ -1,0 +1,17 @@
+export enum FilterOperatorEnum {
+  EQUALS = 'EQUALS',
+  CONTAINS = 'CONTAINS',
+  STARTS_WITH = 'STARTS_WITH',
+  ENDS_WITH = 'ENDS_WITH',
+  NOT_EQUALS = 'NOT_EQUALS',
+  NOT_CONTAINS = 'NOT_CONTAINS',
+  LT = 'LT',
+  LTE = 'LTE',
+  GT = 'GT',
+  GTE = 'GTE',
+  IS_NULL = 'IS_NULL',
+  IS_NOT_NULL = 'IS_NOT_NULL',
+  IN = 'IN',
+  DATE_AFTER = 'DATE_AFTER',
+  DATE_BEFORE = 'DATE_BEFORE',
+}

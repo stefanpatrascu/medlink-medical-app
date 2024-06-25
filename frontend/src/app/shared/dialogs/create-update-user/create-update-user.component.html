@@ -1,0 +1,311 @@
+@if (form) {
+
+  <div class="w-full mt-2">
+    @if (error) {
+      <p-message [text]="error" styleClass="flex mb-3 justify-content-start w-full" severity="danger"></p-message>
+    }
+
+    <form [formGroup]="form" (submit)="onSubmit()">
+
+      <div class="pt-1 pb-6">
+        <p-checkbox formControlName="enabled" [binary]="true" label="Account is active?"></p-checkbox>
+      </div>
+
+      <div class="flex w-full">
+        <div class="pr-3 w-full">
+          <app-form-label
+            label="First Name"
+            styleClass="w-full"
+            htmlFor="firstName"
+            [controlInput]="form.controls['firstName']"
+          >
+            <input pInputText
+                   invalidField
+                   class="w-full"
+                   [maxlength]="30"
+                   formControlName="firstName"
+                   id="firstName"/>
+          </app-form-label>
+        </div>
+        <div class="w-full">
+          <app-form-label
+            label="Last Name"
+            styleClass="w-full"
+            htmlFor="lastName"
+            [controlInput]="form.controls['lastName']">
+            <input pInputText
+                   invalidField
+                   class="w-full"
+                   formControlName="lastName"
+                   id="lastName"/>
+          </app-form-label>
+        </div>
+      </div>
+      <div class="flex w-full">
+        <div class="mt-4 pr-3 w-full">
+          <app-form-label
+            label="CNP"
+            styleClass="w-full"
+            htmlFor="cnp"
+            [controlInput]="form.controls['cnp']">
+            <input pInputText
+                   invalidField
+                   [maxlength]="13"
+                   type="text"
+                   class="w-full"
+                   formControlName="cnp"
+                   id="cnp"/>
+          </app-form-label>
+        </div>
+        <div class="mt-4 w-full">
+          <app-form-label
+            label="Email"
+            styleClass="w-full"
+            htmlFor="email"
+            [controlInput]="form.controls['email']">
+            <input pInputText
+                   invalidField
+                   class="w-full"
+                   formControlName="email"
+                   id="email"/>
+          </app-form-label>
+        </div>
+      </div>
+      @if(allowUpdatePassword) {
+
+      <div class="mt-4">
+        <app-form-label
+          label="Password"
+          styleClass="w-full"
+          htmlFor="password"
+          [controlInput]="form.controls['password']">
+          <p-password styleClass="w-full"
+                      inputStyleClass="w-full"
+
+                      [maxlength]="30" formControlName="password" [toggleMask]="true"></p-password>
+        </app-form-label>
+      </div>
+      }
+      <div class="flex mt-4 w-full">
+        <div class="w-full">
+          <app-form-label
+            styleClass="w-full"
+            label="Roles">
+            <p-multiSelect
+              [options]="roles"
+              [showClear]="true"
+              formControlName="roles"
+              styleClass="w-full"
+              optionValue="key"
+              optionLabel="label"
+              id="roles"
+              filterBy="key"
+              appendTo="body">
+
+            </p-multiSelect>
+          </app-form-label>
+        </div>
+        <div class="w-full md:pl-2">
+          <app-form-label
+            label="Phone"
+            styleClass="w-full"
+            htmlFor="password"
+            [controlInput]="form.controls['phoneNumber']">
+            <input pInputText
+                   invalidField
+                   [maxlength]="14"
+                   type="text"
+                   class="w-full"
+                   formControlName="phoneNumber"
+                   id="phoneNumber"/>
+          </app-form-label>
+        </div>
+      </div>
+
+
+      <div class="mt-4">
+        <app-form-label
+          label="Date of Birth"
+          styleClass="w-full"
+          htmlFor="address"
+          [controlInput]="form.controls['dateOfBirth']"
+        >
+          <p-calendar
+            invalidField
+            [showClear]="true"
+            id="dateOfBirth"
+            dateFormat="dd/mm/yy"
+            styleClass="w-full"
+            [maxDate]="maxDate"
+            formControlName="dateOfBirth"
+            appendTo="body">
+          </p-calendar>
+        </app-form-label>
+      </div>
+
+      <div class="pt-3 pb-3">
+        <p-checkbox formControlName="isEmployee" [binary]="true" label="Is Employee?"></p-checkbox>
+      </div>
+
+      @if (form.controls['isEmployee'].value) {
+        <div class="mt-4">
+          <app-form-label
+            label="Prefix"
+            styleClass="w-full"
+            htmlFor="address"
+            [controlInput]="form.controls['prefix']"
+          >
+            <input pInputText
+                   invalidField
+                   [maxlength]="13"
+                   type="text"
+                   class="w-full"
+                   formControlName="prefix"
+                   id="prefix"/>
+          </app-form-label>
+        </div>
+        <app-form-label
+          styleClass="mt-4"
+          label="Clinic"
+          htmlFor="clinic"
+          [controlInput]="form.controls['clinicId']"
+        >
+          <p-dropdown
+            [options]="(clinics$ | async)!"
+            [filter]="true"
+            [showClear]="true"
+            formControlName="clinicId"
+            optionLabel="label"
+            optionValue="key"
+            styleClass="w-full"
+            id="clinic"
+            filterBy="key"
+            appendTo="body"
+          >
+          </p-dropdown>
+        </app-form-label>
+
+        <div class="mt-4">
+          <app-form-label
+            label="Employee Type"
+            htmlFor="etype"
+            [controlInput]="form.controls['employeeType']"
+          >
+            <p-dropdown
+              [options]="(employeeTypes$ | async)!"
+              [filter]="true"
+              [showClear]="true"
+              formControlName="employeeType"
+              styleClass="w-full"
+              optionLabel="label"
+              optionValue="key"
+              id="etype"
+              filterBy="key"
+              appendTo="body"
+            >
+            </p-dropdown>
+          </app-form-label>
+        </div>
+        <div class="mt-4">
+          <app-form-label
+            label="Specialization"
+            htmlFor="specialization"
+            [controlInput]="form.controls['specialization']"
+          >
+            <p-dropdown
+              [options]="(specializations$ | async)!"
+              [filter]="true"
+              [showClear]="true"
+              formControlName="specialization"
+              styleClass="w-full"
+              id="specialization"
+              optionLabel="label"
+              optionValue="key"
+              filterBy="key"
+              appendTo="body"
+            >
+            </p-dropdown>
+          </app-form-label>
+        </div>
+        <div class="mt-4">
+          <app-form-label
+            label="Hire Date"
+            styleClass="w-full"
+            htmlFor="address"
+            [controlInput]="form.controls['hireDate']"
+          >
+            <p-calendar
+              invalidField
+              [showClear]="true"
+              id="hireDate"
+              dateFormat="dd/mm/yy"
+              styleClass="w-full"
+              formControlName="hireDate"
+              appendTo="body">
+            </p-calendar>
+          </app-form-label>
+        </div>
+
+        <table formGroupName="workingHours" class="w-full">
+          <thead>
+          <tr>
+            <th></th>
+            @for (day of weekDays; track day) {
+              <th>{{ day.toUpperCase() }}</th>
+            }
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="first-col">Working Day</td>
+            @for (day of weekDays; track day) {
+              <td [formGroupName]="day">
+                <p-checkbox formControlName="isWorking" [binary]="true"></p-checkbox>
+              </td>
+            }
+          </tr>
+          <tr>
+            <td class="first-col">Start Time</td>
+            @for (day of weekDays; track day) {
+              <td [formGroupName]="day"
+                  [class.disabled-day]="!form.controls['workingHours'].get(day)?.get('isWorking')?.value">
+                <p-calendar
+                  appendTo="body"
+                  formControlName="startHour"
+                  [timeOnly]="true"/>
+              </td>
+            }
+          </tr>
+          <tr>
+            <td class="first-col">End Time</td>
+
+            @for (day of weekDays; track day) {
+              <td [formGroupName]="day"
+                  [class.disabled-day]="!form.controls['workingHours'].get(day)?.get('isWorking')?.value">
+                <p-calendar
+                  appendTo="body"
+                  formControlName="endHour"
+                  [timeOnly]="true"/>
+              </td>
+            }
+          </tr>
+          </tbody>
+        </table>
+      }
+
+
+      <div class="flex w-full">
+        <div class="mt-4">
+          <button pButton type="submit" [disabled]="form.invalid || form.value.isEmployee && !workProgramIsDefined" class="p-button-primary" label="Submit">
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+}
+@if (loading) {
+  <div class="loading-overlay flex-row z-2 flex align-items-center justify-content-center">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+}

@@ -1,0 +1,79 @@
+@import "global-variables";
+@import "mixin/screens";
+
+:host {
+  overflow: hidden;
+  position: relative;
+}
+
+.navigation-links {
+  padding-left: 5px;
+  margin-top: 14px;
+  position: relative;
+}
+
+.heading > .label {
+  font-size: 14px;
+  font-weight: 400;
+  color: white;
+  border-radius: 10px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  width: 100%;
+  padding-inline-start: 0px;
+
+  > li {
+    padding: 15px 10px;
+    position: relative;
+    color: $white;
+
+    .label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hidden-label {
+      visibility: hidden;
+    }
+
+    .is-active-child, .is-active-parent {
+      font-weight: bold;
+    }
+
+    &.link {
+      cursor: pointer;
+
+      &:hover {
+        font-weight: bold;
+      }
+    }
+  }
+
+  a {
+    color: $white;
+  }
+
+  .icon-right {
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    transition: all 0.5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    position: absolute;
+    right: -1px;
+    top: 10px;
+
+    &.icon-child-right {
+      right: -11px;
+    }
+  }
+
+
+}

@@ -1,0 +1,93 @@
+<div class="navigation-links">
+
+  @if (!mobileMenu()) {
+    <div
+      [ngStyle]="
+      {
+        'transition': 'all 0.1s',
+        'position': 'absolute',
+        'right': '0',
+        'top': top,
+      }">
+      <app-active-icon-corner
+        [icon]="selectedIcon"
+        [hover]="hover">
+      </app-active-icon-corner>
+    </div>
+  }
+
+  <ul>
+    @for (link of links; track link.label) {
+      <li #element
+          [class.link]="link.routerLink"
+          [class.heading]="link.type === 'heading'"
+          [routerLink]="link.routerLink"
+          [routerLinkActive]="['is-active']"
+          (mouseenter)="mouseEnter(element, link)"
+          (mouseleave)="mouseLeave()"
+          (click)="onClickLink()"
+      >
+
+        <div class="label"
+             [routerLinkActive]="['is-active-parent']"
+             [class.hidden-label]="smallMenu()"
+        >
+          @if(link.type === 'heading') {
+            <div class="icon-right"
+                 [pTooltip]="link.label"
+                 [tooltipDisabled]="!smallMenu()"
+            >
+              <i class="pi pi-{{ link.icon }}"></i>
+            </div>
+          }
+          {{ link.label }}
+        </div>
+
+
+        @if (link.icon && link.routerLink && !mobileMenu()) {
+          <div class="icon-right"
+               [pTooltip]="link.label"
+               [tooltipDisabled]="!smallMenu()"
+          >
+            <i class="pi pi-{{ link.icon }}"></i>
+          </div>
+        }
+
+        @if (link.children) {
+          <ul class="pt-3">
+            @for (child of link.children; track child) {
+              <li #childElem
+                  [class.link]="child.routerLink"
+                  [class.heading]="child.type === 'heading'"
+                  [routerLink]="child.routerLink"
+                  [routerLinkActive]="['is-active']"
+                  (mouseenter)="mouseEnter(childElem, child)"
+                  (mouseleave)="mouseLeave()"
+                  (click)="onClickLink()"
+              >
+
+
+                <div class="label"
+                     [routerLinkActive]="['is-active-child']"
+                     [class.hidden-label]="smallMenu()"
+                >
+                  <i class="pi pi-angle-right"></i> {{ child.label }}
+                </div>
+
+
+                @if (child.icon && child.routerLink && !mobileMenu()) {
+
+                  <div class="icon-right icon-child-right"
+                       [pTooltip]="child.label"
+                       [tooltipDisabled]="!smallMenu()">
+                    <i class="pi pi-{{ child.icon }}"></i>
+                  </div>
+                }
+              </li>
+            }
+          </ul>
+        }
+      </li>
+    }
+  </ul>
+</div>

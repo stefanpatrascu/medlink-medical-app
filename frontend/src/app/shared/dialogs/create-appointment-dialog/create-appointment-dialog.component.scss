@@ -1,0 +1,23 @@
+@import "global-variables";
+
+.spots {
+  width: 100%;
+  padding: 20px;
+  padding-left: 0px;
+  white-space: nowrap;
+  overflow-y: hidden;
+  overflow-x: auto;
+  .spot-label {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: 1px solid $primary-color;
+    background: white;
+    color: $primary-color;
+    cursor: pointer;
+    border-radius: 5px;
+    &.active-spot {
+      background: $primary-color;
+      color: white;
+    }
+  }
+}

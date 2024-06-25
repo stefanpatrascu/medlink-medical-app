@@ -1,0 +1,16 @@
+<div class="navigation-bar">
+  <div class="flex-grow-1">
+    <p-button
+      (onClick)="toggleMenu()"
+              icon="pi {{toggleState() ?  'pi-chevron-right' : 'pi-chevron-left'}}"
+              pTooltip="Toggle Menu"
+      tooltipPosition="right"
+              [rounded]="true" [text]="true">
+    </p-button>
+  </div>
+  @if (myAccount) {
+    <div>
+      <p-menubar [model]="accountItems" [autoDisplay]="false"></p-menubar>
+    </div>
+  }
+</div>

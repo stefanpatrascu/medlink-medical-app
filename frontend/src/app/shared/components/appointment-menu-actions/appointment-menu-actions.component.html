@@ -1,0 +1,16 @@
+<p-menu #menu [model]="menuAppointment" appendTo="body" [popup]="true"
+        styleClass="w-full lg:w-3 md:w-4"
+>
+  <ng-template pTemplate="start">
+    <div class="heading-menu">Appointment #{{selectedAppointmentToManage?.id}}</div>
+    <ul class="appointment-menu">
+      <li><strong>Patient:</strong> {{selectedAppointmentToManage?.patient?.fullName}}</li>
+      <li><strong>Date:</strong> {{selectedAppointmentToManage?.appointmentStartDate | isoDateToString: 'dd/MM/yyyy'}} ({{selectedAppointmentToManage?.appointmentStartDate | isoDateToString: 'HH:mm'}} - {{selectedAppointmentToManage?.appointmentEndDate  | isoDateToString: 'HH:mm'}})</li>
+      <li><strong>Doctor:</strong> {{selectedAppointmentToManage?.doctor?.fullName}} ({{selectedAppointmentToManage?.doctor?.speciality}})</li>
+      <li><strong>Phone:</strong> {{selectedAppointmentToManage?.patient?.phoneNumber}}</li>
+    </ul>
+    <div class="heading-menu">Appointment Actions</div>
+  </ng-template>
+
+
+</p-menu>

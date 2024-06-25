@@ -1,0 +1,86 @@
+<div class="login-page grid w-full h-full">
+  <div class="md:col-7 sm:col-12 sm:d-none"></div>
+  <div class="md:col-5 sm:col-12 login-form flex h-full">
+    <div class="w-full flex md:align-items-center justify-content-center">
+      <div class="login-card relative">
+        @if (loading) {
+          <div class="loading-overlay flex-row z-2 flex align-items-center justify-content-center">
+            <p-progressSpinner></p-progressSpinner>
+          </div>
+        }
+        <div class="logo flex flex-row">
+          <app-logo></app-logo>
+        </div>
+        <h1>Healthcare Platform Login</h1>
+        <p>Access all the services and features available for healthcare professionals and patients by logging into our
+          platform.</p>
+        @if (form) {
+          <div>
+            @if (passwordChanged) {
+              <p-message text="Password changed successfully! Please login with your new password."
+                         styleClass="flex mb-3 justify-content-start w-full" severity="success"></p-message>
+            }
+            @if (accountCreated) {
+              <p-message text="Account created successfully! Please login with your new account."
+                         styleClass="flex mb-3 justify-content-start w-full" severity="success"></p-message>
+            }
+            @if (error) {
+              <p-message [text]="error" styleClass="flex mb-3 justify-content-start w-full" severity="danger"></p-message>
+            }
+            <form [formGroup]="form" (submit)="onSubmit()">
+
+              <app-form-label
+                label="Email"
+                iconClass="pi pi-envelope"
+                [controlInput]="form.controls['email']"
+              >
+                <input pInputText
+                       invalidField
+                       class="w-full"
+                       formControlName="email"
+                       id="email"
+                       [maxlength]="120"
+                />
+              </app-form-label>
+
+              <app-form-label
+                label="Password"
+                iconClass="pi pi-lock"
+                styleClass="mt-4"
+                [controlInput]="form.controls['password']"
+              >
+                <input pInputText
+                       invalidField
+                       class="w-full"
+                       type="password"
+                       formControlName="password"
+                       id="password"
+                       [maxlength]="30"
+                />
+              </app-form-label>
+
+              <div class="pt-2">
+                <a (click)="goToForgotPassword()" class="text-sm">Forgot your password?</a>
+              </div>
+
+              <div class="flex w-full">
+                <div class="mt-4">
+                  <button pButton
+                          type="submit"
+                          class="p-button-primary"
+                          label="Login" icon="pi pi-sign-in">
+                  </button>
+                </div>
+                <div class="mt-4 ml-4 flex justify-content-center align-items-center">
+                  <div>
+                    Don't have an account? <a (click)="goToRegister()">Create one</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

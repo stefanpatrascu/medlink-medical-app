@@ -1,0 +1,218 @@
+$highlight-red: rgb(255 64 129 / 5%);
+$highlight-blue: rgb(0 122 255 / 5%);
+$highlight-yellow: rgb(255 234 0 / 5%);
+
+@import 'global-variables';
+
+:host {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.current-date .line {
+  border-top: 2px solid $error-field-color;
+}
+
+.line {
+  border-top: 2px dotted $error-field-color;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  left: 0px;
+  .current-time {
+    background: $error-field-color;
+    position: absolute;
+    top: -1.3rem;
+    font-size: 0.8rem;
+    padding: 0.1rem 0.4rem;
+    left: 0px;
+    color: white;
+    border-radius: 3px;
+  }
+}
+
+.week-calendar {
+
+  td.disabled {
+    background: rgba(0, 0, 0, 0.05);
+    text-align: center;
+    vertical-align: middle;
+    cursor: not-allowed !important;
+    &:after {
+      text-align: left !important;
+      text-transform: uppercase;
+      color: black;
+      font-weight: 200;
+      opacity: 0.5;
+    }
+  }
+
+  tr {
+    td:hover:not(.disabled) {
+      background: $highlight-red !important;
+    }
+  }
+
+  .event-title {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  table.event-table {
+    border-spacing: 0;
+    border: 0px;
+    width: 90%;
+    border-collapse: collapse;
+
+    td {
+      border: 0px;
+    }
+  }
+
+  .event-cell {
+    height: 25px;
+    color: white;
+    position: absolute;
+    font-size: 0.9rem;
+    box-shadow: inset 4px 0px 0px 0px rgba(0, 0, 0, 0.17);
+    text-align: left;
+    padding: 3px 10px;
+    font-weight: normal;
+    cursor: pointer;
+    top: 0px;
+    width: 100%;
+    z-index: 3;
+    left: 0px;
+  }
+
+  .new-event-cell {
+    background: rgba($primary-color, 0.9);
+    box-shadow: inset 4px 0px 0px 0px rgba(0, 0, 0, 0.17);
+    height: 25px;
+    font-size: 0.9rem;
+    color: white;
+    z-index: 4;
+    font-weight: normal;
+    position: absolute;
+    text-align: left;
+    padding: 3px 10px;
+    top: 0px;
+    width: 100%;
+    left: 0px;
+  }
+}
+
+.calendar {
+  border-collapse: collapse;
+
+
+  td {
+    border: 1px solid #d7d7d7;
+    border-collapse: collapse;
+    padding: 3px;
+    font-size: 1.2rem;
+    text-align: right;
+    vertical-align: top;
+    user-select: none;
+
+    &.current-month:hover:not(.disabled-day) {
+      background: $highlight-red !important;
+    }
+
+    .not-available-day {
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+
+    &.min-width {
+      min-width: 170px;
+    }
+
+    &.hour {
+      font-size: 1rem;
+    }
+
+    &.day-of-month {
+      padding: 10px;
+      height: 100px;
+      min-width: 150px;
+    }
+
+    &.not-current-month, &.disabled-day {
+      opacity: 0.5;
+      background-color: #f5f5f6;
+      opacity: 0.8;
+      background-size: 10px 10px;
+      user-select: none;
+      background-image: repeating-linear-gradient(-45deg, #d7d7d7 0, #f5f5f6 1px, #f5f5f6 0, #f5f5f6 50%);
+    }
+
+
+    &.current-date {
+      font-weight: bold;
+      color: $primary-color;
+    }
+
+  }
+
+  th {
+    font-size: 1.2rem;
+    background: #d7d7d7;
+    padding: 20px 10px;
+    font-weight: 400;
+    border: 1px solid #c9c9c9;
+    border-top: 3px solid #c9c9c9;
+
+    &.current-date {
+      font-weight: bold;
+      color: $primary-color;
+      border-top: 3px solid $primary-color;
+    }
+  }
+
+}
+
+.event-label {
+  height: 12px;
+  width: 12px;
+  background: #d7d7d7;
+  display: inline-block;
+  border-radius: 100%;
+}
+
+.label-text-cancelled {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.calendar-loading-overlay {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0px;
+  z-index: 6;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+
+.table-fix-head {
+  overflow: auto;
+  height: 100px;
+
+  thead th {
+    position: sticky;
+    top: -3px;
+    z-index: 4;
+  }
+}

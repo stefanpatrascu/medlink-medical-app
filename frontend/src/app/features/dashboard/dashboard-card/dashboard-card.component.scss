@@ -1,0 +1,80 @@
+@import "global-variables";
+
+$icon-size: 40px;
+
+.dashboard-card {
+  .count {
+    font-weight: bold;
+    color: $default-font-color;
+    font-size: 1.8rem;
+  }
+  padding: 1rem;
+  background: $white;
+  margin-top: 2rem;
+  //padding: 2.3rem 1rem 1rem 1rem;
+  position: relative;
+  display: flex;
+  font-size: 1.1rem;
+
+  border-radius: $border-radius;
+  //justify-content: space-between;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, .12);
+  align-items: start;
+  color: $gray;
+  min-height: $icon-size * 2;
+  flex-direction: column;
+
+  .icon-container {
+    box-shadow: 0 2px 6px 0 rgba(67, 89, 113, .12);
+    position: absolute;
+    top: -2rem;
+    padding: 10px;
+    background: $primary-color;
+    border-radius: $border-radius;
+
+    &.card-requested {
+      box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px lighten($appointment-status-requested, 25%);
+      background: $appointment-status-requested;
+    }
+
+    &.card-confirmed {
+      box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px lighten($appointment-status-confirmed, 25%);
+      background: $appointment-status-confirmed;
+    }
+
+    &.card-completed {
+      box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px lighten($appointment-status-completed, 25%);
+      background: $appointment-status-completed;
+    }
+
+    &.card-canceled {
+      box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px lighten($appointment-status-cancelled, 25%);
+      background: $appointment-status-cancelled;
+    }
+
+    .icon {
+      background-color: $white;
+      mask-size: cover;
+      height: $icon-size;
+      width: $icon-size;
+
+      &.icon-requested {
+        mask-image: url(/assets/svg/product-request-svgrepo-com.svg);
+      }
+
+      &.icon-confirmed {
+        mask-image: url(/assets/svg/calendar-ok.svg);
+      }
+
+      &.icon-completed {
+        mask-image: url(/assets/svg/checklist-svgrepo-com.svg);
+      }
+
+      &.icon-canceled {
+        mask-image: url(/assets/svg/list-remove-svgrepo-com.svg);
+      }
+
+    }
+  }
+}
+

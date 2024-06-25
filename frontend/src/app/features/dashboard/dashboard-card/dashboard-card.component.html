@@ -1,0 +1,21 @@
+<div class="dashboard-card cursor-pointer card-{{title?.toLowerCase()}}" (click)="navigateToAppointments()">
+
+  @if (icon) {
+    <div class="icon-container card-{{title?.toLowerCase()}}">
+      <div [ngClass]="icon">
+      </div>
+    </div>
+
+  }
+
+  <div class="flex flex-column w-full align-items-end">
+    <div class="card-title">
+      {{ title }}
+    </div>
+    <div class="count">
+      {{ count ?? 0 }}
+    </div>
+
+  </div>
+
+</div>

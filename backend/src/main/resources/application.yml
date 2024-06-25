@@ -1,0 +1,66 @@
+server:
+  port: 8080
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 900000 # 15 minutes (in milliseconds)
+    secure-cookie: false
+    cookie-expiration: 86400 # 1 day (in seconds)
+  max-login-attempts: 20
+  lock-login-time: 5 # in minutes
+  csrf:
+    enabled: true
+    domain: localhost
+
+  cors:
+    allowed-origins: "http://localhost:4201"
+    allowed-methods: "GET,POST,PUT,DELETE,PATCH"
+    allowed-headers: "X-XSRF-TOKEN,Content-Type"
+    max-age: 3600
+  validation:
+    display-validation-errors: ${DISPLAY_VALIDATION_ERRORS:true} # ONLY for development purposes
+
+spring:
+  datasource:
+    url: ${DB_URL} # e.g. jdbc:mysql://localhost:3306/yourdb
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    show_sql: true
+    properties:
+      hibernate:
+        ddl-auto: verify
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    baselineOnMigrate: true
+    locations: classpath:db/migration
+
+
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: "*"
+            enable: true
+
+logging:
+  level:
+    org:
+      springframework:
+        security: ${DEBUG_SQL:OFF}
+
+      hibernate:
+        orm:
+          jdbc:
+            bind: ${DEBUG_SQL:OFF}

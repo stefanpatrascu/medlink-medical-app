@@ -1,0 +1,224 @@
+<div class="login-page grid w-full h-full">
+  <div class="md:col-6 sm:col-12 sm:d-none"></div>
+  <div class="md:col-6 sm:col-12 login-form flex h-full">
+    <div class="w-full flex md:align-items-center justify-content-center">
+      <div class="login-card w-full relative">
+        @if (loading) {
+          <div class="loading-overlay flex-row z-2 flex align-items-center justify-content-center">
+            <p-progressSpinner></p-progressSpinner>
+          </div>
+        }
+        <div class="logo flex flex-row">
+          <app-logo></app-logo>
+        </div>
+        <h1>Create your account</h1>
+        @if (form) {
+
+          <div class="w-full">
+            @if (error) {
+              <p-message [text]="error" styleClass="flex mb-3 justify-content-start w-full" severity="danger"></p-message>
+            }
+
+            <form [formGroup]="form" (submit)="onSubmit()">
+              <div class="flex w-full">
+                <div class="pr-3 w-full">
+                  <app-form-label
+                    label="First Name"
+                    styleClass="w-full"
+                    htmlFor="firstName"
+                    [controlInput]="form.controls['firstName']"
+                  >
+                    <input pInputText
+                           invalidField
+                           class="w-full"
+                           [maxlength]="30"
+                           formControlName="firstName"
+                           id="firstName"/>
+                  </app-form-label>
+                </div>
+                <div class="w-full">
+                  <app-form-label
+                    label="Last Name"
+                    styleClass="w-full"
+                    htmlFor="lastName"
+                    [controlInput]="form.controls['lastName']">
+                    <input pInputText
+                           invalidField
+                           class="w-full"
+                           formControlName="lastName"
+                           id="lastName"/>
+                  </app-form-label>
+                </div>
+              </div>
+              <div class="flex w-full">
+                <div class="mt-4 pr-3 w-full">
+                  <app-form-label
+                    label="CNP"
+                    styleClass="w-full"
+                    htmlFor="cnp"
+                    [controlInput]="form.controls['cnp']">
+                    <input pInputText
+                           invalidField
+                           [maxlength]="13"
+                           type="text"
+                           class="w-full"
+                           formControlName="cnp"
+                           id="cnp"/>
+                  </app-form-label>
+                </div>
+                <div class="mt-4 w-full">
+                  <app-form-label
+                    label="Email"
+                    styleClass="w-full"
+                    htmlFor="email"
+                    [controlInput]="form.controls['email']">
+                    <input pInputText
+                           invalidField
+                           class="w-full"
+                           formControlName="email"
+                           id="email"/>
+                  </app-form-label>
+                </div>
+              </div>
+              <div class="mt-4">
+                <app-form-label
+                  label="Password"
+                  styleClass="w-full"
+                  htmlFor="password"
+                  [controlInput]="form.controls['password']">
+                  <p-password styleClass="w-full"
+                              inputStyleClass="w-full"
+
+                              [maxlength]="30" formControlName="password" [toggleMask]="true"></p-password>
+                </app-form-label>
+              </div>
+              <div class="mt-4">
+                <app-form-label
+                  label="Phone"
+                  styleClass="w-full"
+                  htmlFor="password"
+                  [controlInput]="form.controls['phoneNumber']">
+                  <input pInputText
+                         invalidField
+                         [maxlength]="14"
+                         type="text"
+                         class="w-full"
+                         formControlName="phoneNumber"
+                         id="phoneNumber"/>
+                </app-form-label>
+              </div>
+
+              <div class="mt-4">
+                <app-form-label
+                  label="Address"
+                  styleClass="w-full"
+                  htmlFor="address"
+                  [controlInput]="form.controls['address']"
+                >
+                  <input pInputText
+                         invalidField
+                         class="w-full"
+                         formControlName="address"
+                         id="address"/>
+                </app-form-label>
+              </div>
+
+
+              <div class="mt-4">
+                <app-form-label
+                  label="Date of Birth"
+                  styleClass="w-full"
+                  htmlFor="address"
+                  [controlInput]="form.controls['dateOfBirth']"
+                >
+                  <p-calendar
+                    invalidField
+                    [showClear]="true"
+                    id="dateOfBirth"
+                    dateFormat="dd/mm/yy"
+                    styleClass="w-full"
+                    [maxDate]="maxDate"
+                    formControlName="dateOfBirth"
+                    appendTo="body">
+                  </p-calendar>
+                </app-form-label>
+              </div>
+
+              <div class="flex w-full">
+
+
+                <div class="pr-3 w-full mt-4">
+                  <app-form-label
+                    label="County"
+                    styleClass="w-full"
+                    htmlFor="county"
+                    [controlInput]="form.controls['county']"
+                  >
+
+                    <input pInputText
+                           invalidField
+                           class="w-full"
+                           formControlName="county"
+                           id="county"/>
+
+                  </app-form-label>
+                </div>
+
+                <div class="pr-3 mt-4 w-full ">
+                  <app-form-label
+                    label="City"
+                    styleClass="w-full"
+                    htmlFor="city"
+                    [controlInput]="form.controls['city']"
+                  >
+
+                    <input pInputText
+                           invalidField
+                           class="w-full"
+                           formControlName="city"
+                           id="city"/>
+
+                  </app-form-label>
+                </div>
+
+                <div class="pr-3 w-full mt-4">
+                  <app-form-label
+                    label="Postal Code"
+                    styleClass="w-full"
+                    htmlFor="address"
+                    [controlInput]="form.controls['postalCode']"
+                  >
+
+                    <input pInputText
+                           invalidField
+                           class="w-full"
+                           formControlName="postalCode"
+                           id="postalCode"/>
+
+                  </app-form-label>
+                </div>
+
+
+              </div>
+
+
+              <div class="flex w-full">
+                <div class="mt-4">
+                  <button pButton type="submit" class="p-button-primary" icon="pi pi-sign-in" label="Register">
+                  </button>
+                </div>
+                <div class="mt-4 ml-4 flex justify-content-center align-items-center">
+                  <div>
+                    Already have an account? <a routerLink="/login">Login</a>
+                  </div>
+                </div>
+              </div>
+
+
+            </form>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

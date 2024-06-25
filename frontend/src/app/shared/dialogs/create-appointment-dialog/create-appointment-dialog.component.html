@@ -1,0 +1,102 @@
+@if (form) {
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" #formElement>
+
+    <app-form-label
+      styleClass="pt-2"
+      label="Clinic"
+      htmlFor="clinic"
+      [controlInput]="form.controls['clinic']"
+    >
+      <p-dropdown
+        (onChange)="onClinicChange($event.value)"
+        [options]="clinics"
+        [filter]="true"
+        [showClear]="true"
+        formControlName="clinic"
+        styleClass="w-full"
+        id="clinic"
+        filterBy="key"
+        appendTo="body"
+      >
+      </p-dropdown>
+    </app-form-label>
+
+    <app-form-label
+      styleClass="pt-3"
+      label="Specialization"
+      htmlFor="specialization"
+      [controlInput]="form.controls['specialization']"
+    >
+      <p-dropdown
+        (onChange)="onSpecializationChange($event.value)"
+        [options]="filteredSpecializations"
+        [filter]="true"
+        [showClear]="true"
+        formControlName="specialization"
+        styleClass="w-full"
+        filterBy="key,label"
+        id="specialization"
+        appendTo="body">
+      </p-dropdown>
+    </app-form-label>
+
+    <app-form-label
+      styleClass="pt-3"
+      label="Doctor"
+      htmlFor="doctor"
+      [controlInput]="form.controls['doctorId']"
+    >
+      <p-dropdown
+        [options]="filteredDoctors"
+        [filter]="true"
+        [showClear]="true"
+        formControlName="doctorId"
+        styleClass="w-full"
+        id="doctor"
+        optionLabel="fullName"
+        optionValue="id"
+        filterBy="fullName"
+        appendTo="body">
+      </p-dropdown>
+    </app-form-label>
+
+    <app-form-label
+      styleClass="pt-3"
+      label="Appointment Date"
+      htmlFor="appointmentDate"
+      [controlInput]="form.controls['appointmentDate']"
+    >
+      <p-calendar
+        dateFormat="dd/mm/yy"
+        [showClear]="true"
+        [readonlyInput]="true"
+        [minDate]="tomorrowDate"
+        [maxDate]="maxDate"
+        id="appointmentDate"
+        styleClass="w-full"
+        formControlName="appointmentDate"
+        appendTo="body">
+      </p-calendar>
+    </app-form-label>
+
+    @if (form.controls['appointmentDate'].value) {
+      <div class="label pt-3">
+        Available Spots:
+      </div>
+      @if (availableSpots.length > 0) {
+        <div class="spots" [style.max-width.px]="formElement.offsetWidth">
+          @for (spot of availableSpots; track spot.date) {
+            <span class="spot-label"
+                  [class.active-spot]="form.controls['startTime'].value === spot.startTime"
+                  (click)="onSelectSpot(spot.startTime, spot.endTime)"><i class="pi pi-clock"></i> {{ spot.startTime.slice(0,5) }}</span>
+          }
+        </div>
+      } @else {
+        <p>No available spots for the selected date</p>
+      }
+    }
+    <button pButton type="submit"
+            [disabled]="!form.valid"
+            class="mt-3 text-center justify-content-center">Submit</button>
+  </form>
+}

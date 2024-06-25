@@ -1,0 +1,137 @@
+<div class="view-appointment-as-doctor">
+  @if (appointment && form) {
+    <form [formGroup]="form">
+      <p-accordion [multiple]="true" [activeIndex]="[0,1,2,3]">
+        <p-accordionTab header="Appointment Details">
+          <ul>
+            <li>
+              <span class="label">Clinic: </span><span>{{ appointment.clinic.name }} </span>
+            </li>
+            <li>
+              <span class="label">Appointment Date: </span><span>{{
+                dateTime.fromISO(appointment.appointmentStartDate).toFormat('dd/MM/yyyy')
+              }} ({{ dateTime.fromISO(appointment.appointmentStartDate).toFormat('HH:mm') }} - {{
+                dateTime.fromISO(appointment.appointmentEndDate).toFormat('HH:mm')
+              }})</span>
+            </li>
+            <li>
+              <span class="label">Doctor: </span><span>{{ appointment.doctor.fullName }} ({{ appointment.doctor.speciality }}
+              )</span>
+            </li>
+            <li>
+              <span class="label">Status: </span><span>  <div
+              class="appointment-flag appointment-{{ appointment.status.toLowerCase() }}">
+                          {{ appointment.status }}
+                        </div></span>
+            </li>
+            @if (isManager) {
+              <li>
+                <span class="label">Patient Phone: </span><span>{{ appointment.doctor.phoneNumber }}</span>
+              </li>
+              <li>
+                <span class="label">Created at: </span><span>{{
+                  dateTime.fromISO(appointment.createdAt).toFormat('dd/MM/yyyy HH:mm')
+                }}</span>
+              </li>
+              <li>
+                <span class="label">Updated at: </span><span>{{
+                  dateTime.fromISO(appointment.lastUpdatedAt).toFormat('dd/MM/yyyy HH:mm')
+                }}</span>
+              </li>
+              <li>
+                <span class="label">Last updated by: </span><span>{{ appointment.lastUpdatedBy }}</span>
+              </li>
+            }
+          </ul>
+          @if (isManager) {
+            <p-button label="Change Appointment Details"
+                      styleClass="mt-2 mb-4"
+                      size="small"
+                      severity="secondary"
+                      icon="pi pi-external-link"
+                      (onClick)="openUpdateDialog()"></p-button>
+          }
+        </p-accordionTab>
+        @if (isManager) {
+          <p-accordionTab header="Patient Information">
+            <ul>
+              <li>
+                <span class="label">Full name: </span><span>{{ appointment.patient.fullName }}</span>
+              </li>
+              <li>
+                <span class="label">Phone: </span><span>{{ appointment.patient.phoneNumber }}</span>
+              </li>
+              <li>
+                <span class="label">Email: </span><span>{{ appointment.patient.email }}</span>
+              </li>
+              <li>
+                <span class="label">Birthday: </span><span>{{
+                  dateTime.fromISO(appointment.patient.dateOfBirth).toFormat('dd/MM/yyyy')
+                }}
+
+                ({{ calculateAge(appointment.patient.dateOfBirth) }})
+                    </span>
+              </li>
+
+            </ul>
+
+          </p-accordionTab>
+        }
+        <p-accordionTab header="Observations">
+          @if (!isManager) {
+            @if (form.get('observations')?.value === null) {
+              <p>No data</p>
+            } @else {
+              <div [innerHTML]="form.get('observations')?.value"></div>
+            }
+          } @else {
+            <div class="NgxEditor__Wrapper mt-4">
+              <ngx-editor-menu [editor]="recommendationsEditor"
+                               [toolbar]="toolbar">
+              </ngx-editor-menu>
+              <ngx-editor formControlName="observations"
+                          [editor]="recommendationsEditor"
+                          [outputFormat]="'html'"
+                          [placeholder]="'Enter here your observations (eg. patient\'s condition, treatment, etc.)...'">
+              </ngx-editor>
+            </div>
+          }
+        </p-accordionTab>
+        <p-accordionTab header="Recommandations">
+          @if (!isManager) {
+            @if (form.get('recommandations')?.value === null) {
+              <p>No data</p>
+            } @else {
+              <div [innerHTML]="form.get('recommandations')?.value"></div>
+            }
+          } @else {
+            <div class="NgxEditor__Wrapper mt-4">
+              <ngx-editor-menu [editor]="observationsEditor"
+                               [toolbar]="toolbar">
+              </ngx-editor-menu>
+              <ngx-editor formControlName="recommendations"
+                          [editor]="observationsEditor"
+                          [outputFormat]="'html'"
+                          [placeholder]="'Enter here your recommendations (eg. treatment, medication, etc.)...'">
+              </ngx-editor>
+            </div>
+          }
+        </p-accordionTab>
+      </p-accordion>
+
+    </form>
+
+    @if (isManager) {
+      <div class="flex justify-content-between align-items-center">
+        <div>
+          <p-button label="Update Appointment"
+                    styleClass="mt-4 p-button-primary"
+                    (onClick)="update()" class="mr-2 mb-4">
+          </p-button>
+        </div>
+      </div>
+    }
+  }
+
+</div>
+

@@ -1,0 +1,48 @@
+name: Angular Checks
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+    paths:
+      - frontend/**
+  pull_request:
+    branches:
+      - master
+      - develop
+    types: [ opened, synchronize, reopened, ready_for_review ]
+    paths:
+      - frontend/**
+
+defaults:
+  run:
+    working-directory: ./frontend
+
+jobs:
+  angular-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        node-version: [ 20.x ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Build
+        run: npm run build-prod
+
+      - name: Run Tests
+        run: npm run ng test -- --no-watch --no-progress --watch=false --code-coverage --browsers=ChromeHeadless
+
+      - name: Lint
+        run: npm run lint --quiet

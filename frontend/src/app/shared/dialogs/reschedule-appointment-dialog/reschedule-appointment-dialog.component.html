@@ -1,0 +1,57 @@
+@if (form) {
+  <form class="pt-2" [formGroup]="form" (ngSubmit)="onSubmit()" #formElement>
+    <app-form-label
+      styleClass="pt-3"
+      label="Appointment Date"
+      htmlFor="appointmentDate"
+      [controlInput]="form.controls['appointmentDate']"
+    >
+      <p-calendar
+        dateFormat="dd/mm/yy"
+        [showClear]="true"
+        [readonlyInput]="true"
+        [showIcon]="true"
+        [minDate]="todayDate"
+        [maxDate]="maxDate"
+        id="appointmentDate"
+        styleClass="w-full"
+        formControlName="appointmentDate"
+        appendTo="body">
+      </p-calendar>
+    </app-form-label>
+
+    @if (selectedDoctorProgram) {
+      <p>The doctor's working schedule for the selected date is from <strong>{{
+          selectedDoctorProgram.startTime.slice(0, 5)
+        }}</strong>
+        to <strong>{{ selectedDoctorProgram.endTime.slice(0, 5) }}</strong></p>
+    }
+
+    @if (form.controls['appointmentDate'].value) {
+      <div class="label pt-3">
+        <strong>Available Spots:</strong>
+      </div>
+      @if (availableSpots.length > 0) {
+        <div class="spots" [style.max-width.px]="formElement.offsetWidth">
+          @for (spot of availableSpots; track spot.date) {
+            <span class="spot-label"
+                  [class.active-spot]="form.controls['startTime'].value === spot.startTime"
+                  (click)="onSelectSpot(spot.startTime, spot.endTime)"><i class="pi pi-clock"></i> {{
+                spot.startTime.slice(0, 5)
+              }}</span>
+          }
+        </div>
+      } @else {
+        @if (selectedDoctorProgram) {
+          <p>No available spots for the selected date</p>
+        } @else {
+          <p>Doctor had a day off on the selected date</p>
+        }
+      }
+    }
+
+    <div class="pt-3">
+      <p-button type="submit" styleClass="p-button-primary mb-2" label="Reschedule"></p-button>
+    </div>
+  </form>
+}

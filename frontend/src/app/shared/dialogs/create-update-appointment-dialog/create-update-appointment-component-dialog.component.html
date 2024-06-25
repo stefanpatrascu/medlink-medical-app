@@ -1,0 +1,159 @@
+@if (form) {
+  <div>
+    <form #formElement [formGroup]="form" (ngSubmit)="onSubmit()">
+      <app-form-label
+        styleClass="mt-2"
+        label="Clinic"
+        htmlFor="clinic"
+        [controlInput]="form.controls['clinic']"
+      >
+        <p-dropdown
+          (onChange)="onClinicChange($event.value)"
+          [options]="clinics"
+          [filter]="true"
+          [showClear]="true"
+          formControlName="clinicId"
+          styleClass="w-full"
+          optionValue="key"
+          optionLabel="label"
+          id="clinic"
+          filterBy="key"
+          appendTo="body"
+        >
+        </p-dropdown>
+      </app-form-label>
+
+      <app-form-label label="Doctor" styleClass="mt-3"
+                      htmlFor="doctorId"
+                      [controlInput]="form.controls['doctorId']">
+        <p-dropdown
+          [options]="filteredDoctors"
+          id="doctorId"
+          styleClass="w-full"
+          formControlName="doctorId"
+          optionValue="id"
+          filterBy="fullName,specialization,key"
+          [filter]="true"
+          optionLabel="label"
+          appendTo="body">
+          <ng-template let-item pTemplate="item">
+            <div class="doctor-name">
+              {{ item.fullName }}<sub>{{ item.specialization }}</sub>
+            </div>
+          </ng-template>
+          <ng-template let-item pTemplate="selectedItem">
+            <div class="doctor-name">
+              {{ item.fullName }}<sub>{{ item.specialization }}</sub>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </app-form-label>
+
+      <app-form-label label="Patient"
+                      styleClass="mt-3"
+                      htmlFor="patientId"
+                      [controlInput]="form.controls['patientId']">
+        <p-dropdown
+          [options]="allPatients"
+          id="patientId"
+          styleClass="w-full"
+          formControlName="patientId"
+          optionValue="id"
+          [filter]="true"
+          [showClear]="true"
+          filterBy="fullName,key,cnp"
+          optionLabel="fullName"
+          appendTo="body">
+          <ng-template let-item pTemplate="item">
+            <div class="doctor-name">
+              {{ item.fullName }}<sub>CNP: {{ item.cnp }}</sub>
+            </div>
+          </ng-template>
+          <ng-template let-item pTemplate="selectedItem">
+            <div class="doctor-name">
+              {{ item.fullName }}<sub>CNP: {{ item.cnp }}</sub>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </app-form-label>
+
+      <app-form-label label="Status"
+                      styleClass="mt-3"
+                      htmlFor="status"
+                      [controlInput]="form.controls['status']">
+        <p-dropdown
+          [options]="allStatuses"
+          id="status"
+          styleClass="w-full"
+          formControlName="status"
+          optionValue="key"
+          [filter]="true"
+          [showClear]="true"
+          optionLabel="fullName"
+          appendTo="body">
+          <ng-template let-item pTemplate="item">
+            <div class="appointment-flag appointment-{{ item.key.toLowerCase() }}">
+              {{ item.key }}
+            </div>
+          </ng-template>
+          <ng-template let-item pTemplate="selectedItem">
+            <div class="appointment-flag appointment-{{ item.key.toLowerCase() }}">
+              {{ item.key }}
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </app-form-label>
+
+      <div class="flex">
+        <div class="w-full">
+          <app-form-label label="Start Appointment"
+                          styleClass="mt-3"
+                          htmlFor="startTime"
+                          [controlInput]="form.controls['startTime']">
+            <p-calendar
+              appendTo="body"
+              id="startTime"
+              styleClass="w-full"
+              [stepMinute]="30"
+              [showIcon]="true"
+              [readonlyInput]="true"
+              [showTime]="true"
+              formControlName="startTime"
+            />
+          </app-form-label>
+        </div>
+        <div class="w-full md:pl-2">
+          <app-form-label label="End Appointment"
+                          styleClass="mt-3"
+                          htmlFor="endTime"
+                          [controlInput]="form.controls['endTime']">
+            <p-calendar
+              appendTo="body"
+              id="endTime"
+              styleClass="w-full"
+              [minDate]="form.controls['startTime'].value"
+              [showIcon]="true"
+              [stepMinute]="30"
+              [readonlyInput]="true"
+              [showTime]="true"
+              formControlName="endTime"
+            />
+          </app-form-label>
+        </div>
+      </div>
+
+      @if (error) {
+        <div class="pt-3">
+          <p-message [text]="error" styleClass="flex mb-3 justify-content-start w-full" severity="danger"></p-message>
+        </div>
+
+      }
+        <button pButton type="submit"
+                label="Submit"
+                [disabled]="!form.valid"
+                class="mt-3 text-center justify-content-center">
+        </button>
+    </form>
+  </div>
+
+}

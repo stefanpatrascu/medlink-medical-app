@@ -1,0 +1,24 @@
+<app-calendar
+  [allowClickMonthDay]="true"
+  [allowSelectWeekRange]="true"
+  [allowChangeView]="allowChangeView"
+  [selectedView]="selectedView"
+  [allowChangeInterval]="allowChangeInterval"
+  [loading]="loading"
+  [workingHours]="doctorPrograms"
+  [weekCalendarStartDay]="calendarDayInterval.startTime"
+  [weekCalendarEndDay]="calendarDayInterval.endTime"
+  [events]="events"
+  (eventMenuClick)="onEventMenuClick($event)"
+  (clickMonthDay)="onClickMonthDay($event)"
+  (weekIntervalToAdd)="onWeekIntervalToAdd($event)"
+  (intervalChanged)="onChangeInterval($event)">
+
+</app-calendar>
+
+<app-appointment-menu-actions
+  #menuRef
+  [selectedAppointmentToManage]="selectedAppointmentToManage"
+  (shouldRefresh)="reloadCalendar()">
+</app-appointment-menu-actions>
+

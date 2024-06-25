@@ -1,0 +1,49 @@
+@if (appointments.length === 0) {
+  <div class="card">
+    <div class="card-body">
+      <p class="card-text">No appointments found</p>
+    </div>
+  </div>
+}
+
+@for (appointment of appointments; track appointment.id) {
+  <div class="card flex"
+       [ngClass]="'card-' + appointment.status.toLowerCase()">
+    <div class="flex-1">
+      <div>
+        <div class="name">
+          {{ appointment.patient.fullName }}
+        </div>
+        <div class="phone pb-2">
+          <i class="pi pi-phone"></i> {{ appointment.patient.phoneNumber }}
+
+        </div>
+        <div class="flex">
+          <div class="flex-1">
+            <div class="appointment-flag appointment-{{ appointment.status.toLowerCase() }}">
+              {{ appointment.status }}
+            </div>
+          </div>
+        </div>
+        <div class="last-updated">Last updated by {{ appointment.lastUpdatedBy }}</div>
+      </div>
+    </div>
+
+    <div class="right-card flex flex-column justify-content-between">
+      <div class="time">
+        <i class="pi pi-clock"></i> {{ appointment.appointmentStartDate | isoDateToString: 'HH:mm' }}
+      </div>
+      <div class="manage flex justify-content-end">
+        <p-button type="button" size="small" icon="pi pi-file-edit" styleClass="p-button-action" label="Manage" (click)="toggleAppointmentMenu($event, appointment)"></p-button>
+      </div>
+    </div>
+  </div>
+
+
+  <app-appointment-menu-actions
+    #menuRef
+    [selectedAppointmentToManage]="selectedAppointmentToManage"
+    (shouldRefresh)="populateAppointments()">
+  </app-appointment-menu-actions>
+
+}

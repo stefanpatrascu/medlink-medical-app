@@ -1,0 +1,50 @@
+<div class="flex flex-row h-full flex-column md:flex-row lg:flex-row overflow-hidden">
+  <div class="vertical-navigation"
+       [class.vertical-navigation-desktop]="!isMobile"
+       [class.vertical-navigation-mobile]="toggleMobileMenuState"
+       [class.vertical-navigation-toggle]="toggleDesktopMenuState"
+  >
+    <div class="logo flex justify-content-between align-items-center">
+      <app-logo
+        class="cursor-pointer"
+        (click)="goToHome()"
+        [hideText]="toggleDesktopMenuState"
+        textColor="#ffffff">
+      </app-logo>
+
+      @if (isMobile) {
+        <div class="toggle-mobile">
+          <p-button
+            styleClass="p-button-white"
+            icon="pi {{toggleMobileMenuState ? 'pi-times' : 'pi-bars'}}"
+            (onClick)="toggleMobileMenu()"
+            [rounded]="true"
+            [text]="true">
+          </p-button>
+        </div>
+      }
+    </div>
+
+    @if (toggleMobileMenuState || !isMobile) {
+      <app-vertical-navbar
+        [mobileMenu]="isMobile"
+        [smallMenu]="toggleDesktopMenuState"
+        (onClick)="closeMobileMenu()">
+      ></app-vertical-navbar>
+    }
+
+  </div>
+  <div class="flex flex-column w-full h-full overflow-hidden">
+    @if (!isMobile) {
+      <div>
+        <app-header
+          [toggleState]="toggleDesktopMenuState"
+          (onToggle)="toggleDesktopMenu($event)">
+        </app-header>
+      </div>
+    }
+    <div class="vertical-content w-full h-full overflow-y-auto">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

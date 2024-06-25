@@ -1,0 +1,50 @@
+@if (controlInput?.invalid && controlInput?.touched) {
+  @if (controlInput?.errors?.['required']) {
+    <sub class="validation-error">
+      This field cannot be empty
+    </sub>
+  }
+  @if (controlInput?.errors?.['minlength']) {
+    <sub class="validation-error">
+      The field must contain at least {{ controlInput?.errors?.['minlength']?.['requiredLength'] }} characters
+    </sub>
+  }
+  @if (controlInput?.errors?.['maxlength']) {
+    <sub class="validation-error">
+      The field must contain at most {{ controlInput?.errors?.['maxlength']?.['requiredLength'] }} characters
+    </sub>
+  }
+  @if (controlInput?.errors?.['email']) {
+    <sub class="validation-error">
+      Please enter a valid email address
+    </sub>
+  }
+  @if (controlInput?.errors?.['pattern']) {
+    <sub class="validation-error">
+      {{ patternMessage }}
+    </sub>
+  }
+  @if (controlInput?.errors?.['matching']) {
+    <sub class="validation-error">
+      {{ matchingMessage }}
+    </sub>
+  }
+  @if (controlInput?.errors?.['invalidInterval']) {
+    <sub class="validation-error">
+      The end date must be greater than the start date
+    </sub>
+  }
+
+  @if (controlInput?.errors?.['appointmentBigInterval']) {
+    <sub class="validation-error">
+      An appointment cannot be longer than 1 hour
+    </sub>
+  }
+
+  @if (controlInput?.errors?.['appointmentInPast']) {
+    <sub class="validation-error">
+      The appointment cannot be in the past
+    </sub>
+  }
+
+}

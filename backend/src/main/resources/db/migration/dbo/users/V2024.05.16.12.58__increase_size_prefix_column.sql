@@ -1,0 +1,2 @@
+ALTER TABLE users
+    MODIFY COLUMN prefix VARCHAR(30);

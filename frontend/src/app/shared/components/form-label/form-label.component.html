@@ -1,0 +1,18 @@
+<div class="form-label" [ngClass]="styleClass">
+  <div class="flex align-items-center w-full" [class.has-icon]="iconClass">
+    @if (iconClass) {
+      <div class="left-icon">
+        <i [ngClass]="iconClass"></i>
+      </div>
+    }
+    <div class="w-full">
+      <span class="p-float-label">
+        <ng-content></ng-content>
+        <label [for]="htmlFor">{{ label }}</label>
+      </span>
+    </div>
+  </div>
+  @if (controlInput) {
+    <app-validation [controlInput]="controlInput"></app-validation>
+  }
+</div>

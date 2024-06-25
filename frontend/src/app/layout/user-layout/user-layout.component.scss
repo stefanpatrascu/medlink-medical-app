@@ -1,0 +1,42 @@
+@import "global-variables";
+@import "mixin/screens";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.logo {
+  padding: 10px;
+  overflow: hidden;
+  height: 56px;
+  z-index: 6;
+  position: relative;
+  display: flex;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.vertical-navigation {
+  background: $primary-color;
+  width: 100%;
+  position: relative;
+  transition: width ease 0.5s;
+  &.vertical-navigation-desktop {
+    width: 250px;
+  }
+  &.vertical-navigation-mobile {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    z-index:999;
+  }
+  &.vertical-navigation-toggle {
+    width: 50px;
+  }
+}
+
+

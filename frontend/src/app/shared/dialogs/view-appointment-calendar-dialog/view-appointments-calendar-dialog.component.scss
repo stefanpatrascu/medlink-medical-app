@@ -1,0 +1,35 @@
+.card {
+  padding: 10px;
+  box-shadow: 0rem 0.3125rem 0.3125rem 0rem rgba(82, 63, 105, 0.05);
+  height: calc(100% - 30px);
+  border: 1px solid #eee;
+  margin-bottom: 0.6rem;
+  border-radius: 6px;
+
+  .name {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  &.card-canceled {
+    .time {
+      text-decoration: line-through;
+    }
+  }
+
+  .last-updated {
+    font-size: 0.8rem;
+    color: #888;
+  }
+
+  .phone {
+    color: #777;
+  }
+
+  .time {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+}
+

@@ -1,0 +1,32 @@
+server:
+  port: 8089
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 900000 # 15 minutes (in milliseconds)
+    secure-cookie: false
+    cookie-expiration: 86400 # 1 day (in seconds)
+  csrf:
+    enabled: true
+  cors:
+    allowed-origins: "http://localhost:4209"
+  validation:
+    display-validation-errors: false
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    show_sql: true
+    properties:
+      hibernate:
+        ddl-auto: verify
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    baselineOnMigrate: true
+    locations: classpath:db/migration

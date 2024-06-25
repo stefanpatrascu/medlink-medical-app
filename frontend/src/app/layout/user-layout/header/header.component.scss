@@ -1,0 +1,12 @@
+@import "global-variables";
+
+.navigation-bar {
+  background-color: $white;
+  box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  color: $primary-color;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
