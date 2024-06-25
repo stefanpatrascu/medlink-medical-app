@@ -1,4 +1,4 @@
-name: Deploy Frontend to DockerHub and SSH
+name: [FE][DEV] Deploy to DockerHub and SSH
 
 on:
   push:
