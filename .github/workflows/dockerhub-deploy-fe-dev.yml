@@ -39,6 +39,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p $${{ secrets.DOCKER_PASSWORD }}
             docker image pull stefanpatrascu/medlink-frontend-${{ vars.PROFILE }}:latest
             docker container stop medlink-frontend-${{ vars.PROFILE }}
             docker container rm medlink-frontend-${{ vars.PROFILE }}
@@ -48,3 +49,4 @@ jobs:
             -p 127.0.0.1:8080:8080 \
             --network mysql_redis_shared \
             stefanpatrascu/medlink-frontend-${{ vars.PROFILE }}:latest
+            docker logout
