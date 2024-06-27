@@ -7,7 +7,7 @@ RUN mvn dependency:go-offline
 COPY src/ ./src/
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:21-jdk-alpine as prod
+FROM eclipse-temurin:22.0.1_8-jdk-alpine as prod
 
 ARG PROFILE
 ENV PROFILE_ENV=$PROFILE
