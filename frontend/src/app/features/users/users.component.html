@@ -1,10 +1,11 @@
 <div class="flex flex-column h-full">
   <div class="flex align-items-center w-full gap-1 pb-3">
     <div class="w-3">
-      <h1>Users</h1>
+      <h1 data-testid="heading">Users</h1>
     </div>
     <div class="w-full flex justify-content-end">
       <p-button label="Add User"
+                data-testid="add-user-button"
                 styleClass="p-button-primary"
                 (onClick)="openAddUserDialog()"
                 icon="pi pi-plus"></p-button>
@@ -143,12 +144,14 @@
             <div class="flex justify-content-center">
               <p-button
                 label="Edit"
+                data-testid="edit-button"
                 icon="pi pi-pencil"
                 styleClass="p-button-primary"
                 (onClick)="openEditUserDialog(item)">
               </p-button>
 
               <p-button
+                data-testid="delete-button"
                 icon="pi pi-trash"
                 styleClass="ml-2 p-button-danger"
                 (onClick)="openDeleteUserDialog(item)"></p-button>

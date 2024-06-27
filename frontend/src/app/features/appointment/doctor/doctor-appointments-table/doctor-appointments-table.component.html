@@ -1,6 +1,7 @@
 <p-table
   #table
   sortMode="multiple"
+  data-testid="doctor-appointments-table"
   scrollHeight="flex"
   dataKey="id"
   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -33,11 +34,11 @@
   <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-end">
       @if (isExporting) {
-        <p-button severity="success" label="Exporting">
+        <p-button data-testid="export-excel-in-progress" severity="success" label="Exporting">
           <i class="pi pi-spin pi-spinner mr-2"></i>
         </p-button>
       } @else {
-        <p-button severity="success" label="Export Excel" icon="pi pi-file-excel" (click)="exportExcel()"></p-button>
+        <p-button data-testid="export-excel" severity="success" label="Export Excel" icon="pi pi-file-excel" (click)="exportExcel()"></p-button>
       }
     </div>
   </ng-template>
@@ -52,7 +53,7 @@
           <div class="flex align-items-center">
             <div>{{ column.name }}</div>
             <div>
-              <p-sortIcon [field]="column.fieldKey"></p-sortIcon>
+              <p-sortIcon [attr.data-testid]="'sort-by-' + column.fieldKey" [field]="column.fieldKey"></p-sortIcon>
             </div>
             <div>
               @switch (column.fieldType) {
@@ -60,6 +61,7 @@
                   <p-columnFilter
                     display="menu"
                     type="text"
+                    [attr.data-testid]="'filter-by-' + column.fieldKey"
                     [field]="column.fieldKey"
                     [showOperator]="false"
                     [hideOnClear]="true"
@@ -71,6 +73,7 @@
                   <p-columnFilter
                     display="menu"
                     type="numeric"
+                    [attr.data-testid]="'filter-by-' + column.fieldKey"
                     [field]="column.fieldKey"
                     [hideOnClear]="true"
                     [showOperator]="false"
@@ -82,6 +85,7 @@
                   <p-columnFilter
                     display="menu"
                     type="date"
+                    [attr.data-testid]="'filter-by-' + column.fieldKey"
                     [field]="column.fieldKey"
                     [hideOnClear]="true"
                     [showOperator]="false"
@@ -141,6 +145,7 @@
       }
       <td>
         <p-button type="button" icon="pi pi-file-edit" styleClass="p-button-action" label="Manage"
+                  data-testid="manage-appointment-button"
                   (click)="$event.stopPropagation();toggleAppointmentMenu($event, item)" size="small"></p-button>
       </td>
     </tr>

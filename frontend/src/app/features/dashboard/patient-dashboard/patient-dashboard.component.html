@@ -1,11 +1,13 @@
 @if ((currentUser$ | async); as user; ) {
-  <h1>{{ pageTitle }}, {{ user.firstName }}</h1>
+  <h1 data-testid="heading">{{ pageTitle }}, {{ user.firstName }}</h1>
 }
 
 <div class="flex align-items-center justify-content-between">
-  <h2>Appointments this week</h2>
+  <h2 data-testid="subheading">Appointments this week</h2>
   <div>
-    <p-button icon="pi pi-table" label="View All" styleClass="p-button-primary" (onClick)="viewAllAppointments()"></p-button>
+    <p-button icon="pi pi-table"
+              data-testid="view-all-button"
+              label="View All" styleClass="p-button-primary" (onClick)="viewAllAppointments()"></p-button>
   </div>
 </div>
 <app-my-appointments-patient-view

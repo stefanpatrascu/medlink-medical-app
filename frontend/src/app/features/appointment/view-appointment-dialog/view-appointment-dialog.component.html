@@ -47,6 +47,7 @@
             <p-button label="Change Appointment Details"
                       styleClass="mt-2 mb-4"
                       size="small"
+                      data-testid="change-appointment-details-button"
                       severity="secondary"
                       icon="pi pi-external-link"
                       (onClick)="openUpdateDialog()"></p-button>
@@ -125,6 +126,7 @@
       <div class="flex justify-content-between align-items-center">
         <div>
           <p-button label="Update Appointment"
+                    data-testid="update-appointment"
                     styleClass="mt-4 p-button-primary"
                     (onClick)="update()" class="mr-2 mb-4">
           </p-button>

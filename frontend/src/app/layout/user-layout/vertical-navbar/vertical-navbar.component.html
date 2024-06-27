@@ -16,13 +16,14 @@
     </div>
   }
 
-  <ul>
+  <ul data-testid="navigation">
     @for (link of links; track link.label) {
       <li #element
           [class.link]="link.routerLink"
           [class.heading]="link.type === 'heading'"
           [routerLink]="link.routerLink"
           [routerLinkActive]="['is-active']"
+          [attr.data-testid]="'link-' + link.label.toLowerCase().replace(' ', '-')"
           (mouseenter)="mouseEnter(element, link)"
           (mouseleave)="mouseLeave()"
           (click)="onClickLink()"
@@ -58,6 +59,7 @@
             @for (child of link.children; track child) {
               <li #childElem
                   [class.link]="child.routerLink"
+                  [attr.data-testid]="'link-' + child.label.toLowerCase().replace(' ', '-')"
                   [class.heading]="child.type === 'heading'"
                   [routerLink]="child.routerLink"
                   [routerLinkActive]="['is-active']"

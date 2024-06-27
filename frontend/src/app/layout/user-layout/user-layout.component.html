@@ -18,6 +18,7 @@
             styleClass="p-button-white"
             icon="pi {{toggleMobileMenuState ? 'pi-times' : 'pi-bars'}}"
             (onClick)="toggleMobileMenu()"
+            data-testid="mobile-toggle-button"
             [rounded]="true"
             [text]="true">
           </p-button>

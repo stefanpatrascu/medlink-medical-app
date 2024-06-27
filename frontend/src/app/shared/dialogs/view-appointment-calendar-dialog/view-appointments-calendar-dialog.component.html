@@ -1,7 +1,7 @@
 @if (appointments.length === 0) {
   <div class="card">
     <div class="card-body">
-      <p class="card-text">No appointments found</p>
+      <p class="card-text" data-testid="no-appointments">No appointments found</p>
     </div>
   </div>
 }
@@ -34,7 +34,9 @@
         <i class="pi pi-clock"></i> {{ appointment.appointmentStartDate | isoDateToString: 'HH:mm' }}
       </div>
       <div class="manage flex justify-content-end">
-        <p-button type="button" size="small" icon="pi pi-file-edit" styleClass="p-button-action" label="Manage" (click)="toggleAppointmentMenu($event, appointment)"></p-button>
+        <p-button type="button"
+                  data-testid="manage-button"
+                  size="small" icon="pi pi-file-edit" styleClass="p-button-action" label="Manage" (click)="toggleAppointmentMenu($event, appointment)"></p-button>
       </div>
     </div>
   </div>

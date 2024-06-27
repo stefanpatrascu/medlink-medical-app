@@ -6,13 +6,14 @@
       </div>
     }
     <div class="w-full">
-      <span class="p-float-label">
+      <span class="p-float-label" [attr.data-testid]="'field-' + label?.toLowerCase()">
         <ng-content></ng-content>
-        <label [for]="htmlFor">{{ label }}</label>
+        <label [attr.data-testid]="'label-' + label?.toLowerCase()" [for]="htmlFor">{{ label }}</label>
       </span>
     </div>
   </div>
   @if (controlInput) {
-    <app-validation [controlInput]="controlInput"></app-validation>
+    <app-validation [attr.data-testid]="'validation-message-' + label?.toLowerCase()"
+                    [controlInput]="controlInput"></app-validation>
   }
 </div>

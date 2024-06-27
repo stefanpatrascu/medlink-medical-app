@@ -4,30 +4,36 @@
     <div class="w-full flex md:align-items-center justify-content-center">
       <div class="login-card relative">
         @if (loading) {
-          <div class="loading-overlay flex-row z-2 flex align-items-center justify-content-center">
+          <div class="loading-overlay flex-row z-2 flex align-items-center justify-content-center" data-testid="spinner">
             <p-progressSpinner></p-progressSpinner>
           </div>
         }
-        <div class="logo flex flex-row">
+        <div class="logo flex flex-row" data-testid="logo">
           <app-logo></app-logo>
         </div>
-        <h1>Healthcare Platform Login</h1>
-        <p>Access all the services and features available for healthcare professionals and patients by logging into our
+        <h1 data-testid="heading">Healthcare Platform Login</h1>
+        <p data-testid="description">Access all the services and features available for healthcare professionals and patients by
+          logging into our
           platform.</p>
         @if (form) {
           <div>
             @if (passwordChanged) {
-              <p-message text="Password changed successfully! Please login with your new password."
+              <p-message data-testid="password-changed-successfully"
+                         text="Password changed successfully! Please login with your new password."
                          styleClass="flex mb-3 justify-content-start w-full" severity="success"></p-message>
             }
             @if (accountCreated) {
-              <p-message text="Account created successfully! Please login with your new account."
+              <p-message data-testid="account-created-successfully"
+                         text="Account created successfully! Please login with your new account."
                          styleClass="flex mb-3 justify-content-start w-full" severity="success"></p-message>
             }
             @if (error) {
-              <p-message [text]="error" styleClass="flex mb-3 justify-content-start w-full" severity="danger"></p-message>
+              <p-message data-testid="login-error" [text]="error" styleClass="flex mb-3 justify-content-start w-full"
+                         severity="danger"></p-message>
             }
-            <form [formGroup]="form" (submit)="onSubmit()">
+            <form
+              data-testid="login-form"
+              [formGroup]="form" (submit)="onSubmit()">
 
               <app-form-label
                 label="Email"
@@ -36,6 +42,7 @@
               >
                 <input pInputText
                        invalidField
+                       data-testid="email-input"
                        class="w-full"
                        formControlName="email"
                        id="email"
@@ -53,6 +60,7 @@
                        invalidField
                        class="w-full"
                        type="password"
+                       data-testid="password-input"
                        formControlName="password"
                        id="password"
                        [maxlength]="30"
@@ -60,12 +68,13 @@
               </app-form-label>
 
               <div class="pt-2">
-                <a (click)="goToForgotPassword()" class="text-sm">Forgot your password?</a>
+                <a (click)="goToForgotPassword()" class="text-sm" data-testid="forgot-password-link">Forgot your password?</a>
               </div>
 
               <div class="flex w-full">
                 <div class="mt-4">
                   <button pButton
+                          data-testid="login-button"
                           type="submit"
                           class="p-button-primary"
                           label="Login" icon="pi pi-sign-in">
@@ -73,7 +82,7 @@
                 </div>
                 <div class="mt-4 ml-4 flex justify-content-center align-items-center">
                   <div>
-                    Don't have an account? <a (click)="goToRegister()">Create one</a>
+                    Don't have an account? <a (click)="goToRegister()" data-testid="create-account-link">Create one</a>
                   </div>
                 </div>
               </div>

@@ -45,6 +45,7 @@ export class HeaderComponent implements OnInit {
         items: [
           {
             label: 'Log out',
+            id: 'logout',
             command: () => this.logout()
           }
         ]
