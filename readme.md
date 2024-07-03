@@ -104,4 +104,5 @@ See the image below for the configuration of environment variables in IntelliJ I
 1. Open the application in your browser at `http://localhost:4201`.
 2. Log in with the appropriate role credentials to access different functionalities.
 
-
+## License
+This work is licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/4.0/
