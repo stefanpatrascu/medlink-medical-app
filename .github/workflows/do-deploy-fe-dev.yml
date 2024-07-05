@@ -43,7 +43,7 @@ jobs:
         run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
 
       - name: Run registry garbage collection
-        run: doctl registry garbage-collection start --include-untagged-manifests --force
+        run: doctl registry garbage-collection start
 
   deploy:
     runs-on: ubuntu-latest
@@ -72,3 +72,5 @@ jobs:
             -p 127.0.0.1:8080:8080 \
             --name $(echo $IMAGE_NAME) \
             $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
+            # Logout from registry
+            docker logout
