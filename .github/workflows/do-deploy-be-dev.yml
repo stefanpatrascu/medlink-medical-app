@@ -65,7 +65,7 @@ jobs:
             docker rm $(echo $IMAGE_NAME)
             # Run a new container from a new image
             docker run -d \
-            --restart on-failure \
+            --restart always \
             -p 127.0.0.1:8089:8089 \
             --network mysql_redis_shared \
             --env DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
