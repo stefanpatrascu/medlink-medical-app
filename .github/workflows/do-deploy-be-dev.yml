@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build container image
-        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) ./frontend --build-arg PROFILE=$(echo $PROFILE)
+        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) ./backend --build-arg PROFILE=$(echo $PROFILE)
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
