@@ -1,0 +1,85 @@
+name: "[BE][DEV] Deploy to DigitalOcean Container Registry"
+
+on:
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image version'
+        required: true
+#2
+env:
+  REGISTRY: "registry.digitalocean.com/stefan-patrascu-repo"
+  IMAGE_NAME: "medlink-backend-${{ vars.PROFILE }}"
+  PROFILE: ${{ vars.PROFILE }}
+
+#3
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    environment: DEV
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: Build container image
+        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) ./backend --build-arg PROFILE=$(echo $PROFILE)
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 600
+
+      - name: Remove all old images
+        run: if [ ! -z "$(doctl registry repository list | grep "$(echo $IMAGE_NAME)")" ]; then doctl registry repository delete-manifest $(echo $IMAGE_NAME) $(doctl registry repository list-tags $(echo $IMAGE_NAME) | grep -o "sha.*") --force; else echo "No repository"; fi
+
+      - name: Push image to DigitalOcean Container Registry
+        run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment: DEV
+    needs: build_and_push
+
+    steps:
+      - name: Deploy to DigitalOcean Droplet
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          envs: IMAGE_NAME,REGISTRY,{{ secrets.DIGITALOCEAN_ACCESS_TOKEN }},GITHUB_SHA
+          script: |
+            # Login to registry
+            docker login -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} -p ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} registry.digitalocean.com
+            # Stop running container
+            docker stop $(echo $IMAGE_NAME)
+            # Remove old container
+            docker rm $(echo $IMAGE_NAME)
+            # Run a new container from a new image
+            docker run -d \
+            --restart on-failure \
+            -p 127.0.0.1:8089:8089 \
+            --network mysql_redis_shared \
+            --env DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+            --env DB_URL="${{ secrets.DB_URL }}" \
+            --env EMAIL_PASSWORD="${{ secrets.EMAIL_PASSWORD }}" \
+            --env EMAIL_USERNAME="${{ secrets.EMAIL_USERNAME }}" \
+            --env CSRF_DOMAIN="${{ vars.CSRF_DOMAIN }}" \
+            --env DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+            --env JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            --env SMTP_HOST="${{ secrets.SMTP_HOST }}" \
+            --env SMTP_PORT="${{ secrets.SMTP_PORT }}" \
+            --env CORS_ALLOWED_ORIGINS="${{ vars.CORS_ALLOWED_ORIGINS }}" \
+            --env PROFILE="${{ vars.PROFILE }}" \
+            --name $(echo $IMAGE_NAME) \
+            $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
+            # Logout from registry
+            docker logout
