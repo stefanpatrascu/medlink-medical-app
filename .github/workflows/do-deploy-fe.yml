@@ -14,7 +14,7 @@ on:
 env:
   REGISTRY: "registry.digitalocean.com/stefan-patrascu-repo"
   IMAGE_NAME: "medlink-frontend"
-  PROFILE: $${{ vars.PROFILE }}
+  PROFILE: "dev"
 
 #3
 jobs:
