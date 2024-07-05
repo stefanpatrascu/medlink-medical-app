@@ -83,6 +83,13 @@ export class VerticalNavbarComponent implements OnInit {
           visible: this.accountService.hasAnyRoleSyn([RolesEnum.ADMIN]),
           type: 'link',
           icon: 'pi pi-users'
+        },
+        {
+          label: 'Logs',
+          routerLink: [RoutePathEnum.LOGS],
+          visible: this.accountService.hasAnyRoleSyn([RolesEnum.ADMIN]),
+          type: 'link',
+          icon: 'pi pi-file'
         }
       ]
     },

@@ -5,6 +5,7 @@ import { EmployeeGuard } from './guards/employee.guard';
 import { PatientGuard } from './guards/patient.guard';
 import { DoctorAppointmentsCalendarComponent } from './features/appointment/doctor/doctor-appointments-calendar/doctor-appointments-calendar';
 import { AuthenticatedGuard } from '@guards/authenticated.guard';
+import { AdminGuard } from '@guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -60,6 +61,14 @@ export const routes: Routes = [
         data: {
           title: 'Users'
         }
+      },
+      {
+        path: RoutePathEnum.LOGS,
+        canActivate: [AdminGuard],
+        data: {
+          title: 'Logs'
+        },
+        loadComponent: () => import('./features/logs/logs.component').then(m => m.LogsComponent)
       },
       {
         path: RoutePathEnum.APPOINTMENTS,

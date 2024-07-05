@@ -21,9 +21,9 @@ public interface UserService {
 
   List<User> getUserByEmailOrCnp(String email, String cnp);
 
-  ResponseEntity<ApiResponse> createUser(CreateUserDTO createUserDTO);
+  ResponseEntity<ApiResponse> createUser(CreateUserDTO createUserDTO, UserDetails currentUser);
 
-  ResponseEntity<ApiResponse> updateUser(Long id, UpdateUserDTO updateUserDTO);
+  ResponseEntity<ApiResponse> updateUser(Long id, UpdateUserDTO updateUserDTO, UserDetails currentUser);
 
   ResponseEntity<ApiResponse> deleteUser(Long id, UserDetails currentUser);
 

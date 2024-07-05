@@ -1,7 +1,6 @@
 package com.medical.app.appointment.controller;
 
 import com.medical.app.appointment.dto.CreateAppointmentDTO;
-import com.medical.app.appointment.dto.DoctorAvailableIntervals;
 import com.medical.app.appointment.dto.DoctorDayScheduleResponseDTO;
 import com.medical.app.appointment.dto.RescheduleAppointmentDTO;
 import com.medical.app.appointment.dto.UpdateAppointmentDTO;
@@ -17,7 +16,6 @@ import com.medical.app.user.constant.RoleConstants;
 import com.medical.app.util.ApiResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -122,8 +120,9 @@ public class AppointmentsController {
   @PostMapping("/create-by-doctor")
   @PreAuthorize("hasAnyAuthority('" + RoleConstants.DOCTOR + "', '" + RoleConstants.FRONT_DESK + "')")
   public ResponseEntity<ApiResponse> createAppointmentByDoctor(
-      @Valid @RequestBody CreateAppointmentDTO appointment) {
-    return appointmentService.createAppointmentByDoctor(appointment);
+      @Valid @RequestBody CreateAppointmentDTO appointment,
+      @AuthenticationPrincipal UserDetails currentUser) {
+    return appointmentService.createAppointmentByDoctor(appointment, currentUser);
   }
 
   @PutMapping("/change-status/{id}")

@@ -77,8 +77,9 @@ public class UsersController {
 
   @PostMapping("/create")
   @PreAuthorize("hasAnyAuthority('" + RoleConstants.ADMIN + "')")
-  public ResponseEntity<ApiResponse> createEmployee(@Valid @RequestBody CreateUserDTO createEmployeeDTO) {
-    return userService.createUser(createEmployeeDTO);
+  public ResponseEntity<ApiResponse> createEmployee(@Valid @RequestBody CreateUserDTO createEmployeeDTO,
+      @AuthenticationPrincipal UserDetails currentUser) {
+    return userService.createUser(createEmployeeDTO, currentUser);
   }
 
   @DeleteMapping("/delete/{id}")
@@ -93,7 +94,8 @@ public class UsersController {
   @PreAuthorize("hasAnyAuthority('" + RoleConstants.ADMIN + "')")
   public ResponseEntity<ApiResponse> updateEmployee(
       @PathVariable Long id,
-      @Valid @RequestBody UpdateUserDTO createEmployeeDTO) {
-    return userService.updateUser(id, createEmployeeDTO);
+      @Valid @RequestBody UpdateUserDTO createEmployeeDTO,
+      @AuthenticationPrincipal UserDetails currentUser) {
+    return userService.updateUser(id, createEmployeeDTO, currentUser);
   }
 }

@@ -6,6 +6,8 @@ import com.medical.app.account.service.LoginService;
 import com.medical.app.exception.ForbiddenException;
 import com.medical.app.exception.ResourceLockedException;
 import com.medical.app.exception.UnauthorizedException;
+import com.medical.app.logs.enums.LogActionEnum;
+import com.medical.app.logs.service.impl.LogServiceImpl;
 import com.medical.app.security.JwtService;
 import com.medical.app.user.entity.User;
 import com.medical.app.user.repository.UserRepository;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class LoginServiceImpl implements LoginService {
 
   private final JwtService jwtService;
+  private final LogServiceImpl logService;
   private final HttpServletRequest request;
   private final UserServiceImpl userService;
   private final UserRepository userRepository;
@@ -39,6 +42,14 @@ public class LoginServiceImpl implements LoginService {
 
     if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
       lockAccountService.addLoginAttempt(getClientIP());
+
+      logService.addLog(LogActionEnum.LOGIN_FAILED, "Login failed with email: " + loginRequest.getEmail());
+      if (lockAccountService.isAccountLocked(getClientIP())) {
+        logService.addLog(
+            LogActionEnum.LIMIT_LOGIN_ATTEMPTS_EXCEEDED,
+            "Account locked due to too many login attempts with email: " + loginRequest.getEmail());
+      }
+
       throw new UnauthorizedException("Invalid email or password");
     }
 
@@ -52,6 +63,7 @@ public class LoginServiceImpl implements LoginService {
     String token = jwtService.generateToken(user);
     jwtService.saveJwtCookie(response, token);
 
+    logService.addLog(LogActionEnum.LOGIN_SUCCESSFUL, "User logged in successfully with email: " + user.getEmail());
 
     return ResponseEntity.ok(new MyAccountRecord(
         user.getId(),

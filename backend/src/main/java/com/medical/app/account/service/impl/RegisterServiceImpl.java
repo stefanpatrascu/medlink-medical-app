@@ -4,6 +4,8 @@ import com.medical.app.account.dto.RegisterUserDTO;
 import com.medical.app.account.service.RegisterService;
 import com.medical.app.exception.BadRequestException;
 import com.medical.app.exception.ConflictException;
+import com.medical.app.logs.enums.LogActionEnum;
+import com.medical.app.logs.service.impl.LogServiceImpl;
 import com.medical.app.user.entity.Role;
 import com.medical.app.user.entity.User;
 import com.medical.app.user.enums.RoleEnum;
@@ -26,6 +28,7 @@ public class RegisterServiceImpl implements RegisterService {
   private final UserServiceImpl userService;
   private final UserRepository userRepository;
   private PasswordEncoder passwordEncoder;
+  private LogServiceImpl logService;
 
   public ResponseEntity<ApiResponse> register(RegisterUserDTO registerUserDTO) {
 
@@ -64,8 +67,9 @@ public class RegisterServiceImpl implements RegisterService {
 
     newUser.setRoles(Set.of(role));
 
-
     userRepository.save(newUser);
+
+    logService.addLog(LogActionEnum.USER_REGISTERED, "User registered with email: " + newUser.getEmail());
 
     return ApiResponse.created("User registered successfully");
   }
