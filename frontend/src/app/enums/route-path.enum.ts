@@ -18,4 +18,5 @@ export enum RoutePathEnum {
   HOME = 'home',
   USERS = 'users',
   REDIRECTING_AFTER_LOGIN = 'redirecting-after-login',
+  LOGS = 'logs',
 }

@@ -11,6 +11,8 @@ import com.medical.app.employee.repository.EmployeeRepository;
 import com.medical.app.exception.BadRequestException;
 import com.medical.app.exception.ConflictException;
 import com.medical.app.exception.NotFoundException;
+import com.medical.app.logs.enums.LogActionEnum;
+import com.medical.app.logs.service.impl.LogServiceImpl;
 import com.medical.app.pagination.dto.GenericRequestDTO;
 import com.medical.app.pagination.service.PaginationService;
 import com.medical.app.user.dto.CreateUserDTO;
@@ -51,10 +53,7 @@ public class UserServiceImpl implements UserService {
   private PaginationService paginationService;
   private EmployeeRepository employeeRepository;
   private AppointmentsRepository appointmentsRepository;
-
-  private static void accept(Appointment appointment) {
-
-  }
+  private LogServiceImpl logService;
 
   public List<User> getAllUsers() {
     return userRepository.findAll();
@@ -164,11 +163,14 @@ public class UserServiceImpl implements UserService {
 
     userRepository.delete(userFound);
 
+    logService.addLog(LogActionEnum.DELETE_USER, "User with email " + userFound.getEmail() +
+        " was deleted by " + currentUser.getUsername());
+
     return ApiResponse.ok("User deleted successfully");
   }
 
   @Transactional
-  public ResponseEntity<ApiResponse> createUser(CreateUserDTO createUserDTO) {
+  public ResponseEntity<ApiResponse> createUser(CreateUserDTO createUserDTO, UserDetails currentUser) {
     if (getUserByEmailOrCnp(createUserDTO.getEmail(), createUserDTO.getCnp()).size() > 0) {
       throw new ConflictException(EmployeeErrorsEnum.USER_ALREADY_EXISTS_WITH_SAME_EMAIL_OR_CNP.toString());
     }
@@ -184,13 +186,17 @@ public class UserServiceImpl implements UserService {
       newEmployee.setEmployee(createEmployeeObject(createUserDTO.getEmployee(), newEmployee));
     }
 
+    logService.addLog(LogActionEnum.USER_CREATED,
+        "User with email" + newEmployee.getEmail() + " was created by " + currentUser.getUsername());
+
+
     userRepository.saveAndFlush(newEmployee);
 
     return ApiResponse.created("Employee created successfully");
   }
 
   @Transactional
-  public ResponseEntity<ApiResponse> updateUser(Long id, UpdateUserDTO updateUserDTO) {
+  public ResponseEntity<ApiResponse> updateUser(Long id, UpdateUserDTO updateUserDTO, UserDetails currentUser) {
     User userFound = getUserById(id);
 
     if (updateUserDTO.getPrefix() == null) {
@@ -209,7 +215,7 @@ public class UserServiceImpl implements UserService {
         .findFirst()
         .ifPresent(user -> {
           throw new ConflictException(EmployeeErrorsEnum.USER_ALREADY_EXISTS_WITH_SAME_EMAIL_OR_CNP.toString());
-    });
+        });
 
     userFound.setEmail(updateUserDTO.getEmail().toLowerCase());
     userFound.setEnabled(updateUserDTO.getEnabled());
@@ -248,6 +254,9 @@ public class UserServiceImpl implements UserService {
       employeeRepository.delete(userFound.getEmployee());
       userFound.setEmployee(null);
     }
+
+    logService.addLog(LogActionEnum.USER_UPDATED,
+        "User with email" + userFound.getEmail() + " was updated by " + currentUser.getUsername());
 
     return ApiResponse.ok("User updated successfully");
   }

@@ -21,6 +21,8 @@ import com.medical.app.employee.entity.WorkProgram;
 import com.medical.app.exception.BadRequestException;
 import com.medical.app.exception.ForbiddenException;
 import com.medical.app.exception.NotFoundException;
+import com.medical.app.logs.enums.LogActionEnum;
+import com.medical.app.logs.service.impl.LogServiceImpl;
 import com.medical.app.pagination.dto.FilterCriteriaDTO;
 import com.medical.app.pagination.dto.GenericRequestDTO;
 import com.medical.app.pagination.enums.FieldTypeEnum;
@@ -61,6 +63,7 @@ public class AppointmentsServiceImpl implements AppointmentService {
   private final ClinicServiceImpl clinicServiceImpl;
   private final AppointmentValidationServiceImpl appointmentValidationService;
   private final PaginationServiceImpl paginationService;
+  private final LogServiceImpl logService;
 
   public Page<Appointment> getAllAppointments(GenericRequestDTO requestFilterDTO) {
     return appointmentsRepository.findAll(
@@ -371,6 +374,9 @@ public class AppointmentsServiceImpl implements AppointmentService {
 
     appointmentsRepository.save(appointment);
 
+    logService.addLog(LogActionEnum.UPDATE_APPOINTMENT,
+        "Appointment ID: " + appointment.getId() + " updated by " + userDetails.getUsername());
+
     return ApiResponse.ok(AppointmentMessagesEnum.APPOINTMENT_UPDATED_SUCCESSFULLY.toString());
   }
 
@@ -392,6 +398,9 @@ public class AppointmentsServiceImpl implements AppointmentService {
     appointment.setLastUpdatedDate(LocalDateTime.now());
 
     appointmentsRepository.save(appointment);
+
+    logService.addLog(LogActionEnum.UPDATE_APPOINTMENT,
+        "Appointment ID: " + appointment.getId() + " updated by " + currentUser.getUsername());
 
     return ApiResponse.ok(AppointmentMessagesEnum.APPOINTMENT_STATUS_CHANGED_SUCCESSFULLY.toString());
   }
@@ -492,7 +501,8 @@ public class AppointmentsServiceImpl implements AppointmentService {
   }
 
   public ResponseEntity<ApiResponse> createAppointmentByDoctor(
-      CreateAppointmentDTO appointmentDTO) {
+      CreateAppointmentDTO appointmentDTO,
+      UserDetails currentUser) {
 
     final User patient = userService.getUserById(appointmentDTO.getPatientId());
 
@@ -515,6 +525,8 @@ public class AppointmentsServiceImpl implements AppointmentService {
     Appointment newAppointment = constructNewAppointment(patient, doctor, clinic, appointmentDTO.getStatus(),
         startDate, endDate);
     appointmentsRepository.save(newAppointment);
+
+    logService.addLog(LogActionEnum.CREATE_APPOINTMENT, "Appointment ID: " + newAppointment.getId() + " created by " + currentUser.getUsername());
 
     return ApiResponse.ok(AppointmentMessagesEnum.APPOINTMENT_CREATED_SUCCESSFULLY.toString());
   }

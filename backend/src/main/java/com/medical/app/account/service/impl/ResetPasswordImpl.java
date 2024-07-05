@@ -3,6 +3,8 @@ package com.medical.app.account.service.impl;
 import com.medical.app.account.entity.PasswordReset;
 import com.medical.app.account.repository.ResetPasswordRepository;
 import com.medical.app.account.service.ResetPasswordService;
+import com.medical.app.logs.enums.LogActionEnum;
+import com.medical.app.logs.service.impl.LogServiceImpl;
 import com.medical.app.mail.SmtpService;
 import com.medical.app.user.entity.User;
 import com.medical.app.user.repository.UserRepository;
@@ -25,6 +27,7 @@ public class ResetPasswordImpl implements ResetPasswordService {
 
   private final SmtpService smtpService;
   private final ResetPasswordRepository resetPasswordRepository;
+  private final LogServiceImpl logService;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
@@ -58,10 +61,16 @@ public class ResetPasswordImpl implements ResetPasswordService {
 
     if (userFound == null) {
       log.error("Trying to reset password for non-existing user with email: {}", email);
+      logService.addLog(
+          LogActionEnum.TRYING_TO_RESET_PASS_FOR_NON_EXISTING_USER,
+          "Trying to reset password for non-existing user with email: " + email);
     } else {
 
       if (!userFound.isEnabled()) {
         log.error("Trying to reset password for disabled user with email: {}", email);
+        logService.addLog(
+            LogActionEnum.TRYING_TO_RESET_PASS_FOR_DISABLED_USER,
+            "Trying to reset password for disabled user with email: " + email);
         return ApiResponse.ok("If the email exists in the database, a reset password email will be sent");
       }
 
@@ -77,6 +86,8 @@ public class ResetPasswordImpl implements ResetPasswordService {
               + passwordReset.getOtp() + "\n\n"
               + "If you did not request this, please ignore this email. The OTP will expire in 30 minutes.\n\n"
               + "MedLink Team");
+
+      logService.addLog(LogActionEnum.RESET_PASS_EMAIL_SENT, "Reset password email sent to: " + email);
     }
 
     return ApiResponse.ok("If the email exists in the database, a reset password email will be sent");
