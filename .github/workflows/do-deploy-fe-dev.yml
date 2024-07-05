@@ -13,7 +13,7 @@ on:
 #2
 env:
   REGISTRY: "registry.digitalocean.com/stefan-patrascu-repo"
-  IMAGE_NAME: "medlink-frontend"
+  IMAGE_NAME: "medlink-frontend-${{ vars.PROFILE }}"
   PROFILE: ${{ vars.PROFILE }}
 
 #3
