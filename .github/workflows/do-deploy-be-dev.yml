@@ -2,7 +2,7 @@ name: "[BE][DEV] Deploy to DigitalOcean Container Registry"
 
 on:
   push:
-    branches: [ master, digitalocean ]
+    branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
