@@ -128,7 +128,7 @@ public class SecurityConfig {
       http.csrf(
           csrf -> csrf
               .csrfTokenRequestHandler(csrfRequestHandler)
-              .ignoringRequestMatchers("/register", "/login", "/account/reset/**")
+              .ignoringRequestMatchers("/register", "/login", "/account/reset/**", "/service-status/**")
               .csrfTokenRepository(tokenRepository)
       );
     } else {
@@ -139,7 +139,7 @@ public class SecurityConfig {
     http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
     http.authorizeHttpRequests((requests) -> requests
-        .requestMatchers("/login", "/register", "/account/reset/**", "/account/refresh")
+        .requestMatchers("/login", "/register", "/account/reset/**", "/account/refresh", "/service-status/**")
         .permitAll()
         .anyRequest().authenticated()
     );
