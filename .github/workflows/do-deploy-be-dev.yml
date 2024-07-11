@@ -79,6 +79,7 @@ jobs:
             --env SMTP_PORT="${{ secrets.SMTP_PORT }}" \
             --env CORS_ALLOWED_ORIGINS="${{ vars.CORS_ALLOWED_ORIGINS }}" \
             --env PROFILE="${{ vars.PROFILE }}" \
+            --memory="1g" \
             --name $(echo $IMAGE_NAME) \
             $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
             # Logout from registry
