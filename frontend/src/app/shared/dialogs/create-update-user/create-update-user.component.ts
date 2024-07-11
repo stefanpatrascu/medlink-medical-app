@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -52,7 +52,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   templateUrl: './create-update-user.component.html',
   styleUrl: './create-update-user.component.scss'
 })
-export class CreateUpdateUserComponent implements OnInit {
+export class CreateUpdateUserComponent implements OnInit, AfterViewInit {
+
   form!: FormGroup;
   maxDate: Date = new Date();
   error: string | null = null;
@@ -63,6 +64,12 @@ export class CreateUpdateUserComponent implements OnInit {
   clinics$: Observable<IDropdown<number>[]> = this.clinicService.getAllClinics();
   workProgramIsDefined: boolean = false;
   allowUpdatePassword: boolean = true;
+  maxTableWidth: number = 0;
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.maxTableWidth = window.innerWidth / 1.1;
+  }
 
   roles: IDropdown<RolesEnum>[] = [
     {
@@ -94,6 +101,10 @@ export class CreateUpdateUserComponent implements OnInit {
               private dialogRef: DynamicDialogRef,
               private dialogConfig: DynamicDialogConfig<IUserGrid>
   ) {
+  }
+
+  ngAfterViewInit(): void {
+    this.maxTableWidth = window.innerWidth / 1.1;
   }
 
   ngOnInit(): void {
@@ -217,7 +228,7 @@ export class CreateUpdateUserComponent implements OnInit {
     }
 
     if (this.form.value.isEmployee) {
-      request.prefix = this.form.value.prefix.trim() + ' ';
+      request.prefix = this.form.value.prefix?.trim() + ' ';
     } else {
       request.prefix = null;
     }

@@ -1,6 +1,6 @@
 @if (form) {
 
-  <div class="w-full mt-2">
+  <div class="w-full mt-2 overflow-hidden">
     @if (error) {
       <p-message [text]="error" styleClass="flex mb-3 justify-content-start w-full" severity="danger"></p-message>
     }
@@ -11,8 +11,8 @@
         <p-checkbox formControlName="enabled" [binary]="true" label="Account is active?"></p-checkbox>
       </div>
 
-      <div class="flex w-full">
-        <div class="pr-3 w-full">
+      <div class="flex w-full flex-column md:flex-row lg:flex-row">
+        <div class="pb-4 lg:pb-0 md:pb-0 lg:pr-3 md:pr-3 w-full">
           <app-form-label
             label="First Name"
             styleClass="w-full"
@@ -41,8 +41,8 @@
           </app-form-label>
         </div>
       </div>
-      <div class="flex w-full">
-        <div class="mt-4 pr-3 w-full">
+      <div class="flex w-full flex-column md:flex-row lg:flex-row">
+        <div class="mt-4 md:pr-3 lg:pr-3 w-full">
           <app-form-label
             label="CNP"
             styleClass="w-full"
@@ -86,8 +86,8 @@
         </app-form-label>
       </div>
       }
-      <div class="flex mt-4 w-full">
-        <div class="w-full">
+      <div class="flex mt-4 w-full flex-column md:flex-row lg:flex-row">
+        <div class="lg:pr-3 md:pr-3 pb-4 md:pb-0 lg:pb-0 w-full">
           <app-form-label
             styleClass="w-full"
             label="Roles">
@@ -105,7 +105,7 @@
             </p-multiSelect>
           </app-form-label>
         </div>
-        <div class="w-full md:pl-2">
+        <div class="w-full">
           <app-form-label
             label="Phone"
             styleClass="w-full"
@@ -245,58 +245,62 @@
             </p-calendar>
           </app-form-label>
         </div>
+        <div class="working-hours-scrollable overflow-auto" [style.width.px]="maxTableWidth">
+          <table formGroupName="workingHours">
+            <thead>
+            <tr>
+              <th></th>
+              @for (day of weekDays; track day) {
+                <th>{{ day.toUpperCase() }}</th>
+              }
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="first-col">Working Day</td>
+              @for (day of weekDays; track day) {
+                <td [formGroupName]="day">
+                  <p-checkbox formControlName="isWorking" [binary]="true"></p-checkbox>
+                </td>
+              }
+            </tr>
+            <tr>
+              <td class="first-col">Start Time</td>
+              @for (day of weekDays; track day) {
+                <td [formGroupName]="day"
+                    [class.disabled-day]="!form.controls['workingHours'].get(day)?.get('isWorking')?.value">
+                  <p-calendar
+                    styleClass="w-full"
+                    appendTo="body"
+                    formControlName="startHour"
+                    [timeOnly]="true"/>
+                </td>
+              }
+            </tr>
+            <tr>
+              <td class="first-col">End Time</td>
 
-        <table formGroupName="workingHours" class="w-full">
-          <thead>
-          <tr>
-            <th></th>
-            @for (day of weekDays; track day) {
-              <th>{{ day.toUpperCase() }}</th>
-            }
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="first-col">Working Day</td>
-            @for (day of weekDays; track day) {
-              <td [formGroupName]="day">
-                <p-checkbox formControlName="isWorking" [binary]="true"></p-checkbox>
-              </td>
-            }
-          </tr>
-          <tr>
-            <td class="first-col">Start Time</td>
-            @for (day of weekDays; track day) {
-              <td [formGroupName]="day"
-                  [class.disabled-day]="!form.controls['workingHours'].get(day)?.get('isWorking')?.value">
-                <p-calendar
-                  appendTo="body"
-                  formControlName="startHour"
-                  [timeOnly]="true"/>
-              </td>
-            }
-          </tr>
-          <tr>
-            <td class="first-col">End Time</td>
-
-            @for (day of weekDays; track day) {
-              <td [formGroupName]="day"
-                  [class.disabled-day]="!form.controls['workingHours'].get(day)?.get('isWorking')?.value">
-                <p-calendar
-                  appendTo="body"
-                  formControlName="endHour"
-                  [timeOnly]="true"/>
-              </td>
-            }
-          </tr>
-          </tbody>
-        </table>
+              @for (day of weekDays; track day) {
+                <td [formGroupName]="day"
+                    [class.disabled-day]="!form.controls['workingHours'].get(day)?.get('isWorking')?.value">
+                  <p-calendar
+                    styleClass="w-full"
+                    appendTo="body"
+                    formControlName="endHour"
+                    [timeOnly]="true"/>
+                </td>
+              }
+            </tr>
+            </tbody>
+          </table>
+        </div>
       }
 
 
       <div class="flex w-full">
         <div class="mt-4">
-          <button pButton type="submit" [disabled]="form.invalid || form.value.isEmployee && !workProgramIsDefined" class="p-button-primary" label="Submit">
+          <button pButton type="submit" [disabled]="form.invalid || form.value.isEmployee && !workProgramIsDefined"
+                  class="p-button-primary" label="Submit">
           </button>
         </div>
       </div>

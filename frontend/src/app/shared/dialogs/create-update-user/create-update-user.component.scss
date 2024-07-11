@@ -7,3 +7,13 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
+.working-hours-scrollable {
+  table {
+    table-layout: fixed;
+    td {
+      width: 100px;
+      min-width: 100px;
+    }
+  }
+}
